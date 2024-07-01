@@ -17,7 +17,7 @@ router.post('/signup', async (req, res) =>{
 
         const payload = {
             id: response.id,
-            username: response.username
+            email: response.email
         }
         console.log(JSON.stringify(payload));
         const token = generateToken(payload);
@@ -34,21 +34,21 @@ router.post('/signup', async (req, res) =>{
 // Login Route
 router.post('/login', async(req, res) => {
     try{
-        // Extract username and password from request body
-        const {username, password} = req.body;
+        // Extract email and password from request body
+        const {email, password} = req.body;
 
-        // Find the user by username
-        const user = await Person.findOne({username: username});
+        // Find the user by email
+        const user = await Person.findOne({email: email});
 
         // If user does not exist or password does not match, return error
         if( !user || !(await user.comparePassword(password))){
-            return res.status(401).json({error: 'Invalid username or password'});
+            return res.status(401).json({error: 'Invalid email or password'});
         }
 
         // generate Token 
         const payload = {
             id: user.id,
-            username: user.username
+            email: user.email
         }
         const token = generateToken(payload);
 

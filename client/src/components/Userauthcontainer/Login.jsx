@@ -1,92 +1,112 @@
-import React from 'react'
+import React, { useState } from 'react';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate hook
+
 import Navbar from '../homecontainer/Navbar';
-import Footer from '../homecontainer/Footer'
-import  { useState } from "react" 
+import Footer from '../homecontainer/Footer';
 
-
-
+// InputField component definition (unchanged)
 const InputField = ({ label, type = "text", value, onChange, error }) => (
-    <div className="mt-4">
-      <label className="block text-sm font-medium text-zinc-600 mb-1">
-        {label}
-      </label>
-      <input
-        type={type}
-        value={value}
-        onChange={onChange}
-        className={`block w-full bg-white rounded-xl shadow-sm border ${error ? 'border-red-500' : 'border-gray-300'} h-10 px-3`}
-        aria-label={label}
-      />
-      {error && <span className="text-red-500 text-xs">{error}</span>}
-    </div>
-  );
-
+  <div className="mt-4">
+    <label className="block text-sm font-medium text-zinc-600 mb-1">
+      {label}
+    </label>
+    <input
+      type={type}
+      value={value}
+      onChange={onChange}
+      className={`block w-full bg-white rounded-xl shadow-sm border ${error ? 'border-red-500' : 'border-gray-300'} h-10 px-3`}
+      aria-label={label}
+    />
+    {error && <span className="text-red-500 text-xs">{error}</span>}
+  </div>
+);
+// LogInForm component definition with redirection logic
 function LogInForm() {
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const [errors, setErrors] = useState({});
-  
-    const validateEmail = (email) => {
-      const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      return re.test(email);
-    };
-  
-    const validatePassword = (password) => {
-      const re = /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=!]).{6,}$/;
-      return re.test(password);
-    };
-  
-    const handleSubmit = (e) => {
-      e.preventDefault();
-      const newErrors = {};
-  
-      if (!validateEmail(email)) {
-        newErrors.email = "Invalid email address";
-      }
-      if (!validatePassword(password)) {
-        newErrors.password = "Password must be at least 6 characters long and include at least one number, one lowercase letter, one uppercase letter, and one special symbol";
-      }
-  
-      if (Object.keys(newErrors).length > 0) {
-        setErrors(newErrors);
-      } else {
-        // Handle successful login
-        console.log("Logging in...");
-      }
-    };
-  
-    return (
-      <form onSubmit={handleSubmit} className="flex flex-col my-auto text-base text-left text-zinc-500 px-4">
-        <h2 className="self-center mb-2 text-2xl font-bold text-green-800">Welcome Back</h2>
-        <h2 className="self-center text-2xl font-bold text-green-800">Log in</h2>
-        <InputField
-          label="Email"
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          error={errors.email}
-        />
-        <InputField
-          label="Password"
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          error={errors.password}
-        />
-        <button
-          type="submit"
-          className="mt-4 h-10 bg-green-800 rounded-xl text-white font-medium"
-        >
-          Log in
-        </button>
-        <div className="flex gap-2 self-start mt-4 text-sm text-green-800">
-          <p className="grow">Don't have an account</p>
-          <a href="#" className="font-bold">Sign up</a>
-        </div>
-      </form>
-    );
-  }
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [errors, setErrors] = useState({});
+  const navigate = useNavigate(); // Utilize useNavigate hook
 
+  const validateEmail = (email) => {
+    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return re.test(email);
+  };
+
+  const validatePassword = (password) => {
+    const re = /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=!]).{6,}$/;
+    return re.test(password);
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const newErrors = {};
+
+    if (!validateEmail(email)) {
+      newErrors.email = "Invalid email address";
+    }
+    if (!validatePassword(password)) {
+      newErrors.password = "Password must be at least 6 characters long and include at least one number, one lowercase letter, one uppercase letter, and one special symbol";
+    }
+
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+    } else {
+      // Send login data to backend
+      axios.post('http://localhost:3000/api/person/login', {
+        email,
+        password,
+      })
+        .then(response => {
+          const { token } = response.data;
+          // Store token in localStorage or sessionStorage for future use
+          localStorage.setItem('token', token);
+          console.log("Login successful. Token:", token);
+        
+          // Redirect to home page after successful login
+          navigate('/'); // Navigate to the home page route
+        })
+        .catch(error => {
+          console.error("Login failed:", error);
+          // Handle login failure, possibly update state to display error message
+          setErrors({ email: 'Invalid username or password' }); // Example error handling
+        });
+    }
+  };
+
+  return (
+    <form onSubmit={handleSubmit} className="flex flex-col my-auto text-base text-left text-zinc-500 px-4">
+      <h2 className="self-center mb-2 text-2xl font-bold text-green-800">Welcome Back</h2>
+      <h2 className="self-center text-2xl font-bold text-green-800">Log in</h2>
+      <InputField
+        label="Email"
+        type="email"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        error={errors.email}
+      />
+      <InputField
+        label="Password"
+        type="password"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+        error={errors.password}
+      />
+      <button
+        type="submit"
+        className="mt-4 h-10 bg-green-800 rounded-xl text-white font-medium"
+      >
+        Log in
+      </button>
+      <div className="flex gap-2 self-start mt-4 text-sm text-green-800">
+        <p className="grow">Don't have an account</p>
+        <a href="#" className="font-bold">Sign up</a>
+      </div>
+    </form>
+  );
+}
+
+// Login component (unchanged)
 const Login = () => {
   return (
     <>
@@ -112,5 +132,4 @@ const Login = () => {
     </>
   )
 }
-
-export default Login
+export default Login;
