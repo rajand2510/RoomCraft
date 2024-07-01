@@ -4,12 +4,12 @@ const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const Person = require('./models/Person'); // Adjust the path as needed
 
-passport.use(new LocalStrategy(async (username, password, done) => {
+passport.use(new LocalStrategy(async (email, password, done) => {
     try {
-        // console.log('Received credentials:', username, password);
-        const user = await Person.findOne({ username });
+        // console.log('Received credentials:', email, password);
+        const user = await Person.findOne({ email });
         if (!user)
-            return done(null, false, { message: 'Incorrect username.' });
+            return done(null, false, { message: 'Incorrect email.' });
         
         const isPasswordMatch = await user.comparePassword(password);
         if (isPasswordMatch)

@@ -1,36 +1,48 @@
-const express = require('express')
+const express = require('express');
 const app = express();
-const db = require('./db');
+const db = require('./db'); // Ensure this path is correct
 require('dotenv').config();
+const cors = require('cors');
 const passport = require('./auth');
+const bodyParser = require('body-parser');
 
-const bodyParser = require('body-parser'); 
-app.use(bodyParser.json()); // req.body
 const PORT = process.env.PORT || 3000;
 
+// Middleware setup
+app.use(cors({
+  origin: 'http://localhost:5173',
+  credentials: true
+}));
+app.use(bodyParser.json()); // Parse JSON requests
 
-// Middleware Function
+// Log each request to the console
 const logRequest = (req, res, next) => {
-    console.log(`[${new Date().toLocaleString()}] Request Made to : ${req.originalUrl}`);
-    next(); // Move on to the next phase
-}
+  console.log(`[${new Date().toLocaleString()}] Request Made to: ${req.originalUrl}`);
+  next(); // Move on to the next middleware
+};
 app.use(logRequest);
 
 app.use(passport.initialize());
-const localAuthMiddleware = passport.authenticate('local', {session: false})
+const localAuthMiddleware = passport.authenticate('local', { session: false });
 
-app.get('/', function (req, res) {
-    res.send('Welcome to our Hotel');
-})
+app.get('/', (req, res) => {
+  res.send('Welcome to our Hotel');
+});
 
-// Import the router files
-const personRoutes = require('./routes/personRoutes');
-const menuItemRoutes = require('./routes/menuItemRoutes');
+// Import router files
+const personRoutes = require('./routes/personRoutes'); // Ensure this path is correct
+const menuItemRoutes = require('./routes/menuItemRoutes'); // Ensure this path is correct
 
 // Use the routers
-app.use('/person', personRoutes);
-app.use('/menu', menuItemRoutes);
-  
-app.listen(PORT, ()=>{
-    console.log('listening on port 3000');
-})
+app.use('/api/person', personRoutes);
+app.use('/api/menu', menuItemRoutes);
+
+// Error handling middleware
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).send('Something broke!');
+});
+
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
+});

@@ -7,32 +7,16 @@ const personSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    age:{
-        type: Number
-    },
-    work:{
-        type: String,
-        enum: ['chef', 'waiter', 'manager'],
-        required: true
-    },
-    mobile:{
-        type: String,
-        required: true
-    },
     email:{
         type: String,
         required: true,
         unique: true
     },
-    address:{
-        type: String
-    },
-    salary:{
-        type: Number,
+    mobile:{
+        type: String,
         required: true
     },
-    username: {
-        required: true,
+    address:{
         type: String
     },
     password: {
