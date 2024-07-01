@@ -31,11 +31,11 @@ app.get('/', (req, res) => {
 
 // Import router files
 const personRoutes = require('./routes/personRoutes'); // Ensure this path is correct
-const menuItemRoutes = require('./routes/menuItemRoutes'); // Ensure this path is correct
+const productListRoutes = require('./routes/ProductListRoutes'); // Ensure this path is correct
 
 // Use the routers
 app.use('/api/person', personRoutes);
-app.use('/api/menu', menuItemRoutes);
+app.use('/api/productlist', productListRoutes);
 
 // Error handling middleware
 app.use((err, req, res, next) => {

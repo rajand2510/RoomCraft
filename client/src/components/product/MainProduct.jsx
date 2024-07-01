@@ -1,6 +1,6 @@
 import * as React from "react";
 import Footer from "../homecontainer/Footer";
-import Navbar from "../Userauthcontainer/Loginnav";
+import Navbar from "../homecontainer/Navbar";
 import { useMediaQuery } from "react-responsive";
 
 const ProductImage = ({ src, alt }) => {

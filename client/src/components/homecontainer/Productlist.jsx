@@ -1,10 +1,10 @@
-import React, { useState, useEffect, useRef } from "react";
+
+import  { useState, useEffect, useRef } from "react";
 import { useMediaQuery } from "react-responsive";
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { Link } from 'react-router-dom';
-
 const ProductCard = ({ gltfPath, title, price, positionY, initialScale }) => {
   const controlsRef = useRef();
   const [model, setModel] = useState(null);
@@ -89,78 +89,13 @@ const ProductCard = ({ gltfPath, title, price, positionY, initialScale }) => {
 };
 
 const ProductList = () => {
- 
-  const productData = [
-    {
-      id: 1,
-      title: "Bharat Sales Vinyl Adjustable Height Control Chair",
-      price: "29.99",
-      gltfPath: "/models/indoor_plant/scene.gltf",
-      initialScale: 4,
-      positionY: -2.5,
-    },
-    {
-      id: 2,
-      title: "Outdoor Chair",
-      price: "49.99",
-      gltfPath: "/models/indoor_plant/scene.gltf",
-      initialScale: 4,
-      positionY: -2.5,
-    },
-    {
-      id: 3,
-      title: "Smartphone",
-      price: "799.99",
-      gltfPath: "/models/indoor_plant/scene.gltf",
-      initialScale: 4,
-      positionY: -2.5,
-    },
-    {
-      id: 4,
-      title: "Indoor Plant",
-      price: "29.99",
-      gltfPath: "/models/indoor_plant/scene.gltf",
-      initialScale: 4,
-      positionY: -2.5,
-    },
-    {
-      id: 5,
-      title: "Outdoor Chair",
-      price: "49.99",
-      gltfPath: "/models/indoor_plant/scene.gltf",
-      initialScale: 4,
-      positionY: -2.5,
-    },
-    {
-      id: 6,
-      title: "Smartphone",
-      price: "799.99",
-      gltfPath: "/models/indoor_plant/scene.gltf",
-      initialScale: 4,
-      positionY: -2.5,
-    },
-    {
-      id: 7,
-      title: "Outdoor Chair",
-      price: "49.99",
-      gltfPath: "/models/indoor_plant/scene.gltf",
-      initialScale: 4,
-      positionY: -2.5,
-    },
-    {
-      id: 8,
-      title: "Smartphone",
-      price: "79999",
-      gltfPath: "/models/indoor_plant/scene.gltf",
-      initialScale: 4,
-      positionY: -2.5,
-    },
-  ];
-  
+  const [products, setProducts] = useState([]);
   const [priceFilter, setPriceFilter] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [productsPerPage, setProductsPerPage] = useState(12);
 
-  const isMobile = useMediaQuery({query: "(max-width: 768px)" });
+  const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
   const isTablet = useMediaQuery({ query: "(min-width: 769px) and (max-width: 1024px)" });
 
   let gridCols = "grid-cols-4";
@@ -170,6 +105,24 @@ const ProductList = () => {
     gridCols = "grid-cols-2";
   }
 
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const response = await fetch('http://localhost:3000/api/productlist/products');
+        if (!response.ok) {
+          throw new Error('Failed to fetch products');
+        }
+        const data = await response.json();
+        setProducts(data);
+      } catch (error) {
+        console.error('Error fetching products:', error);
+        // Handle error state as needed
+      }
+    };
+
+    fetchProducts();
+  }, []);
+
   const handlePriceFilterChange = (event) => {
     setPriceFilter(event.target.value);
   };
@@ -178,39 +131,49 @@ const ProductList = () => {
     setSearchTerm(event.target.value);
   };
 
+  const paginate = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
+
+  const filteredProducts = products.filter((product) => {
+    if (searchTerm) {
+      return product.title.toLowerCase().includes(searchTerm.toLowerCase());
+    }
+    return true;
+  });
+
+  if (priceFilter === "Low to high") {
+    filteredProducts.sort((a, b) => a.price - b.price);
+  } else if (priceFilter === "High to low") {
+    filteredProducts.sort((a, b) => b.price - a.price);
+  }
+
+  const indexOfLastProduct = currentPage * productsPerPage;
+  const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
+  const currentProducts = filteredProducts.slice(indexOfFirstProduct, indexOfLastProduct);
+
   return (
     <div className="mt-10">
       <div className="flex justify-center">
         <p className="text-[40px] font-bold text-green-950">Our Products</p>
       </div>
       <div className="flex flex-col mt-[20px] md:flex-row justify-between items-center mb-5 px-5 space-y-4 md:space-y-0 md:space-x-4">
-        <input
-          type="text"
-          placeholder="Search products..."
-          value={searchTerm}
-          onChange={handleSearchChange}
-          className="px-10 py-2 w-full   text-black bg-white border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-green-950"
-        />
-        <button className="px-4 py-2 w-full  md:w-auto text-white bg-green-900 rounded-lg hover:bg-green-800">
-          Search
-        </button>
+        
         <select
           className="px-4 py-2 w-full md:w-auto text-black bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-950"
           value={priceFilter}
           onChange={handlePriceFilterChange}
         >
           <option value="">Filter by Price</option>
-          <option value="less_than_1000">Less than 1000</option>
-          <option value="1000_5000">1000 - 5000</option>
-          <option value="5000_10000">5000 - 10000</option>
-          <option value="more_than_10000">More than 10000</option>
+          <option value="Low to high">Low to high</option>
+          <option value="High to low">High to low</option>
         </select>
       </div>
 
       <div className={`grid ${gridCols} gap-y-5`}>
-        {productData.map((product, index) => (
+        {currentProducts.map((product) => (
           <ProductCard
-            key={index}
+            key={product._id} // Assuming MongoDB ObjectId or similar
             title={product.title}
             price={product.price}
             gltfPath={product.gltfPath}
@@ -220,8 +183,20 @@ const ProductList = () => {
         ))}
       </div>
 
+      <div className="flex  justify-center px-1 mb-3 mt-5">
+        {[...Array(Math.ceil(products.length / productsPerPage))].map((_, index) => (
+          <button
+            key={index + 1}
+            onClick={() => paginate(index + 1)}
+            className={`px-4 mx-1 py-2 ${currentPage === index + 1 ? 'bg-green-900  text-white' : 'bg-gray-200 text-black'} rounded-lg hover:bg-green-800`}
+          >
+            {index + 1}
+          </button>
+        ))}
+      </div>
     </div>
   );
 };
-
 export default ProductList;
+
+
