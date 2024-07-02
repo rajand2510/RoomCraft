@@ -17,7 +17,7 @@ function App() {
 <Route path="/Checkout" element={<Checkout />} />
 <Route path="/login" element={<Login/>} />
 <Route path="/signup" element={<Signup/>} />
-<Route path="/products" element={<MainProduct/>} />
+<Route path="products" element={<MainProduct/>} />
 <Route path="/cube" element={<CubeConatainer />}/>
 <Route path="/xr-cube" element={<XrCubeConatainer />}/>
 <Route path="/xr-hit-cube" element={<XrCubeConatainer />}/>
