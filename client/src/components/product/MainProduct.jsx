@@ -78,7 +78,7 @@ const ProductDetails = ({ title, discription, price, gltfPath }) => {
     <section className="flex flex-col self-stretch mt-4 my-auto">
       <h1 className="text-3xl font-medium text-justify text-black">{title}</h1>
       <p className="mt-3 text-lg text-black">{discription}</p>
-      <p className="mt-4 text-3xl font-bold text-justify text-black">{price}</p>
+      <p className="mt-4 text-3xl font-bold text-justify text-black">Rs.{price}</p>
       <AddToCartButton />
       
       <div className="">
