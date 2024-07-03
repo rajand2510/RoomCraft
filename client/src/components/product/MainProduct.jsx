@@ -88,48 +88,56 @@ const AddToCartButton = () => {
   const imgsrc =params.get('imgsrc');
   const _id =params.get('_id');
 
-   const handleAddToCart = async () => {
+  const handleAddToCart = async () => {
     const tokenhandle = localStorage.getItem('token');
-
+  
     if (tokenhandle) {
       try {
         const decoded = jwtDecode(tokenhandle);
-        const orderData = {
-          userid: decoded.id,
-          title,
-          imgsrc,
-          price,
-          quantity: 1,
-          isorder: false,
-          orderId: _id // Send _id as orderId
-        };
+        const cartitemId = _id; // Get the _id of the product
+        const userId = decoded.id; // Get the ID of the logged-in user
+
+        console.log(cartitemId);
   
-        // Show loading indicator (optional)
+        // Check if the product is already in the cart for the logged-in user
+        const response = await fetch(`http://localhost:3000/api/cart/cartlist?userId=${userId}&cartitemId=${cartitemId}`);
+        const data = await response.json();
   
-        const response = await fetch('http://localhost:3000/api/userorder/addtocart', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(orderData)
-        });
+        if (data.length > 0) {
+          toast.info('You already have this product in your cart.', {
+            position: "top-right",
+            autoClose: 4000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light"
+          });
+          console.log('Duplicate item in cart');
+        } else {
+          // If the product is not in the cart, send a POST request to add it
+          const orderData = {
+            userId: decoded.id,
+            title,
+            imgsrc,
+            price,
+            quantity: 1,
+            isorder: false,
+            cartitemId: _id
+          };
   
-        if (!response.ok) {
-          const errorData = await response.json(); // Parse error response for specific details
-          if (errorData.message === 'Duplicate item in cart') {
-            toast.info('You already have this product in your cart.', {
-              position: "top-right",
-              autoClose: 4000,
-              hideProgressBar: false,
-              closeOnClick: true,
-              pauseOnHover: true,
-              draggable: true,
-              progress: undefined,
-              theme: "light"
-            });
-            console.log('Duplicate item in cart');
-          } else {
-            toast.info('An error occurred while adding to cart:', {
+          const addCartResponse = await fetch('http://localhost:3000/api/cart/addcart', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(orderData)
+          });
+  
+          if (!addCartResponse.ok) {
+            const errorData = await addCartResponse.json();
+            toast.error('An error occurred while adding to cart:', {
               position: "top-right",
               autoClose: 4000,
               hideProgressBar: false,
@@ -140,24 +148,23 @@ const AddToCartButton = () => {
               theme: "light"
             });
             console.error('Error adding item to cart:', errorData.message);
+          } else {
+            toast.success('Item added to cart successfully', {
+              position: "top-right",
+              autoClose: 4000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "light"
+            });
+            console.log('Item added to cart successfully');
           }
-        } else {
-          // Hide loading indicator (optional)
-          toast.success('Item added to cart successfully', {
-            position: "top-right",
-            autoClose: 4000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "light"
-          });
-          console.log('Item added to cart successfully');
         }
       } catch (error) {
         console.error('Error adding item to cart:', error);
-        toast.info('An unexpected error occurred. Please try again later.', {
+        toast.error('An unexpected error occurred. Please try again later.', {
           position: "top-right",
           autoClose: 4000,
           hideProgressBar: false,
@@ -169,7 +176,7 @@ const AddToCartButton = () => {
         });
       }
     } else {
-      toast.info('Login for add item to cart', {
+      toast.info('Login to add item to cart', {
         position: "top-right",
         autoClose: 4000,
         hideProgressBar: false,
@@ -180,7 +187,7 @@ const AddToCartButton = () => {
         theme: "light"
       });
     }
-  };
+};
 
   return (
     <button className="flex gap-1 px-5 w-2/12 py-1.5 mt-7 text-base font-bold text-justify text-white bg-black rounded-3xl"

@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import { useAuth } from '../../AuthContext';
+import axios from 'axios';
+import {jwtDecode }from 'jwt-decode';
 
 const NavItem = ({ to, children }) => {
   return (
@@ -40,7 +42,36 @@ const Navbar = () => {
   const toggleProfile = () => {
     setIsProfileOpen(!isProfileOpen);
   };
+  
+  useEffect(() => {
+    const tokenhandle = localStorage.getItem('token');
 
+    if (tokenhandle) {
+      try {
+        const decoded = jwtDecode(tokenhandle);
+        const userId = decoded.id; // Get the ID of the logged-in user
+
+        axios.get('http://localhost:3000/api/cart/cart_count', {
+          params: {
+            userId,
+          },
+          headers: {
+            Authorization: `Bearer ${tokenhandle}`,
+          },
+        })
+       .then(response => {
+          setCartItems(response.data.count);
+        })
+       .catch(error => {
+          console.error(error);
+        });
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  }, []);
+
+console.log(cartItems);
   return (
     <header className="fixed top-0 z-50 w-full bg-green-950 text-white px-16 text-lg">
       <div className="flex gap-5 justify-between w-full max-w-[1473px] max-md:flex-wrap max-md:max-w-full">

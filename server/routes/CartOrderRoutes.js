@@ -31,6 +31,18 @@ router.get('/cartlist', async (req, res) => {
   }
 });
 
-
+router.get('/cart_count', async (req, res) => {
+    try {
+      const userId = req.query.userId;
+      if (!userId) {
+        return res.status(400).json({ error: 'Missing userId parameter' });
+      }
+      const count = await CartOrder.countDocuments({ userId });
+      res.status(200).json({ count });
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ error: 'Failed to retrieve cart count' });
+    }
+  });
 
   module.exports = router;

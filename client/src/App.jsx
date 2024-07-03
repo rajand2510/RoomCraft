@@ -23,9 +23,7 @@ function App() {
 <Route path="/xr-cube" element={<XrCubeConatainer />}/>
 <Route path="/xr-hit-cube" element={<XrCubeConatainer />}/>
 <Route path="/xr" element={<XrHitModelConatainer />}/>
-
 </Routes>
-
   )
 }
 
