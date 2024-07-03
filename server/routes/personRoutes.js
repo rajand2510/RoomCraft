@@ -3,7 +3,7 @@ const router = express.Router();
 const Person = require('./../models/Person');
 const {jwtAuthMiddleware, generateToken} = require('./../jwt');
 const mongoose = require('mongoose');
-
+const nodemailer = require('nodemailer');
 
 // POST route to add a person
 router.post('/signup', async (req, res) =>{
@@ -24,6 +24,77 @@ router.post('/signup', async (req, res) =>{
         console.log(JSON.stringify(payload));
         const token = generateToken(payload);
         console.log("Token is : ", token);
+
+        // Send a welcome email to the new user
+        const transporter = nodemailer.createTransport({
+          host: 'smtp.gmail.com',
+          port: 587,
+          secure: false, // or 'STARTTLS'
+          auth: {
+            user: 'rajand2510@gmail.com',
+            pass: 'jqrbudvancjsqukq'
+          }
+        });
+
+        const mailOptions = {
+          from: 'rajand2510@gmail.com',
+          to: response.email,
+          subject: 'Welcome to our platform!',
+          html: `
+   <html>
+  <head>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+      }
+      .header {
+        background-color: #052e16; /* green color */
+        padding: 20px;
+        text-align: center;
+      }
+      .logo {
+        width: 100px;
+        height: 100px;
+        margin: 0 auto;
+      }
+      .card {
+        background-color: #FFFFFF; /* white color */
+        padding: 20px;
+        margin: 20px;
+        border: 1px solid #CCCCCC;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="header">
+      <img src="https://i.ibb.co/7Q2cbvB/Screenshot-2024-07-03-221223.png" alt="Logo" class="logo">
+    </div>
+    <div class="card">
+      <h2>Congratulations! You've Successfully Registered</h2>
+      <p>Dear  ${response.name},</p>
+      
+      <p>We are thrilled to inform you that you have successfully registered with our platform. We appreciate the trust you have placed in us and are excited to have you on board.</p>
+      <p>As a valued member of our community, you can now access a wide range of features and benefits designed to enhance your experience.</p>
+      <p>Thank you for choosing us, and we look forward to serving you.</p>
+      <p>Best regards,</p>
+      <p>DecorCraft team</p>
+    </div>
+  </body>
+</html>
+  `
+
+        };
+
+        transporter.sendMail(mailOptions, (error, info) => {
+          if (error) {
+            return console.log(error);
+          }
+          console.log('Email sent: ' ,info.response);
+        });
 
         res.status(200).json({response: response, token: token});
     }

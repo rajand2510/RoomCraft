@@ -7,6 +7,9 @@
   import { jwtDecode } from "jwt-decode";
   import { ToastContainer, toast } from 'react-toastify';
   import 'react-toastify/dist/ReactToastify.css';
+  import { useCart } from '../../CartContext'; 
+  
+
 
   const token = localStorage.getItem('token');
 
@@ -28,7 +31,7 @@
     const controlsRef = useRef();
     const [model, setModel] = useState(null);
     const [loadModelError, setLoadModelError] = useState(null);
-
+const { updateCartItems } = useCart(); 
 
     useEffect(() => {
       const loader = new GLTFLoader();
@@ -101,7 +104,7 @@
             const errorData = await addCartResponse.json();
             toast.error('An error occurred while adding to cart:', {
               position: "top-right",
-              autoClose: 4000,
+              autoClose: 2000,
               hideProgressBar: false,
               closeOnClick: true,
               pauseOnHover: true,
@@ -111,24 +114,28 @@
             });
             console.error('Error adding item to cart:', errorData.message);
           } else {
+           
             toast.success('Item added to cart successfully', {
               position: "top-right",
-              autoClose: 4000,
-              hideProgressBar: false,
-              closeOnClick: true,
-              pauseOnHover: true,
-              draggable: true,
+              autoClose: 1000,
+              hideProgressBar: true,
+              closeOnClick: false,
+              pauseOnHover: false,
+              draggable: false,
               progress: undefined,
-              theme: "light"
+              theme: "light",
             });
+            
             console.log('Item added to cart successfully');
+            updateCartItems(data.newCartCount);
           }
+          
         }
       } catch (error) {
         console.error('Error adding item to cart:', error);
         toast.error('An unexpected error occurred. Please try again later.', {
           position: "top-right",
-          autoClose: 4000,
+          autoClose: 2000,
           hideProgressBar: false,
           closeOnClick: true,
           pauseOnHover: true,
@@ -140,7 +147,7 @@
     } else {
       toast.info('Login to add item to cart', {
         position: "top-right",
-        autoClose: 4000,
+        autoClose: 2000,
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,
@@ -149,6 +156,7 @@
         theme: "light"
       });
     }
+
 };
 
 
@@ -171,18 +179,7 @@
 
           </div>
         </Link>
-        <ToastContainer
-          position="top-right"
-          autoClose={5000}
-          hideProgressBar={false}
-          newestOnTop={false}
-          closeOnClick
-          rtl={false}
-          pauseOnFocusLoss
-          draggable
-          pauseOnHover
-          theme="light"
-        />
+       
         <div className="flex gap-0.5 items-start mt-10">
           <div className="flex flex-col grow self-start w-fit">
             <h2 className="text-base text-black">{title}</h2>
@@ -284,6 +281,20 @@
 
     return (
       <div className="mt-10"  id="products">
+        { toast.isOpen && 
+         <ToastContainer
+          position="top-right"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="light"
+        />
+      }
         <div className="flex justify-center">
           <p className="text-[40px] font-bold text-green-950">Our Products</p>
         </div>

@@ -10,7 +10,7 @@ import { useLocation } from 'react-router-dom';
 import { jwtDecode } from "jwt-decode";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
+import { useCart } from '../../CartContext'; 
 
 
 
@@ -50,6 +50,19 @@ const ProductCard = ({ gltfPath, positionY, initialScale }) => {
 
   return (
     <div className="flex flex-col mx-[15px] my-[20px] bg-white shadow-lg max-w-[380px] max-h-[480px] rounded-[25px]">
+        { toast.isOpen && 
+         <ToastContainer
+          position="top-right"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="light"
+        />}
       <div className="shrink-0 rounded-[20px] bg-zinc-300 h-[320px]">
         <Canvas
           className="product-canvas rounded-[15px]"
@@ -62,25 +75,13 @@ const ProductCard = ({ gltfPath, positionY, initialScale }) => {
           <OrbitControls ref={controlsRef} />
           {model && <primitive object={model} />}
         </Canvas>
-        <ToastContainer
-        position="top-right"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="light"
-      />
       </div>
     </div>
   );
 };
 
 const AddToCartButton = () => {
-
+  const { updateCartItems } = useCart(); 
   const location = useLocation();
   const params = new URLSearchParams(location.search);
   const title = params.get('title');
@@ -151,15 +152,17 @@ const AddToCartButton = () => {
           } else {
             toast.success('Item added to cart successfully', {
               position: "top-right",
-              autoClose: 4000,
+              autoClose: 2000,
               hideProgressBar: false,
               closeOnClick: true,
               pauseOnHover: true,
               draggable: true,
               progress: undefined,
-              theme: "light"
+              theme: "light",
+              transition: "Bounce"
             });
             console.log('Item added to cart successfully');
+            updateCartItems(data.newCartCount);
           }
         }
       } catch (error) {

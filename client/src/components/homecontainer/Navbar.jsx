@@ -1,9 +1,11 @@
-import React, { useState,useEffect } from 'react';
+// src/homecontainer/Navbar.js
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { ToastContainer, toast } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
 import { useAuth } from '../../AuthContext';
 import axios from 'axios';
-import {jwtDecode }from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode';
+import { useCart } from '../../CartContext';  // Import the cart context
 
 const NavItem = ({ to, children }) => {
   return (
@@ -25,13 +27,11 @@ const Button = ({ children, className, onClick }) => (
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
-  const [cartItems, setCartItems] = useState(0);
-
+  const { cartItems, updateCartItems } = useCart();  // Consume the cart context
   const { isLoggedIn, handleLogout } = useAuth();
 
   const navItems = [
     { text: 'Home', path: '/' },
-    { text: 'Products', path: '/products' },
     { text: 'About Us', path: '/about' },
   ];
 
@@ -49,18 +49,14 @@ const Navbar = () => {
     if (tokenhandle) {
       try {
         const decoded = jwtDecode(tokenhandle);
-        const userId = decoded.id; // Get the ID of the logged-in user
+        const userId = decoded.id;
 
         axios.get('http://localhost:3000/api/cart/cart_count', {
-          params: {
-            userId,
-          },
-          headers: {
-            Authorization: `Bearer ${tokenhandle}`,
-          },
+          params: { userId },
+          headers: { Authorization: `Bearer ${tokenhandle}` },
         })
        .then(response => {
-          setCartItems(response.data.count);
+          updateCartItems(response.data.count);
         })
        .catch(error => {
           console.error(error);
@@ -69,9 +65,8 @@ const Navbar = () => {
         console.error(error);
       }
     }
-  }, []);
+  }, [updateCartItems]);
 
-console.log(cartItems);
   return (
     <header className="fixed top-0 z-50 w-full bg-green-950 text-white px-16 text-lg">
       <div className="flex gap-5 justify-between w-full max-w-[1473px] max-md:flex-wrap max-md:max-w-full">
@@ -142,7 +137,7 @@ console.log(cartItems);
               ) : (
                 <div className="flex flex-col gap-6 font-semibold mt-4 md:hidden">
                   <NavItem to="/login">
-                    <Button className="px-8">Log in</Button>
+                    <Button className="px-5">Log in</Button>
                   </NavItem>
                   <NavItem to="/signup">
                     <Button>Sign up</Button>
@@ -154,7 +149,7 @@ console.log(cartItems);
           {!isLoggedIn && (
             <div className="hidden md:flex gap-6 font-semibold">
               <NavItem to="/login">
-                <Button className="px-8">Log in</Button>
+                <Button className="px-5">Log in</Button>
               </NavItem>
               <NavItem to="/signup">
                 <Button>Sign up</Button>

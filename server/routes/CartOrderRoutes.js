@@ -45,4 +45,32 @@ router.get('/cart_count', async (req, res) => {
     }
   });
 
+  router.get('/checkout', async (req, res) =>{
+    try{
+        const userId = req.query.userId; 
+        const data = await CartOrder.find({ userId: userId });
+        console.log('data fetched');
+        res.status(200).json(data);
+    }catch(err){
+        console.log(err);
+        res.status(500).json({error: 'Internal Server Error'});
+    }
+})
+
+
+router.delete('/cartdelete', async (req, res) => {
+    try {
+      const _id = req.query._id;
+      const deletedOrder = await CartOrder.findByIdAndRemove(_id);
+      if (!deletedOrder) {
+        return res.status(404).json({ error: 'Order not found' });
+      }
+      res.status(200).json({ message: 'Order deleted successfully' });
+    } catch (err) {
+      console.log(err);
+      res.status(500).json({ error: 'Internal Server Error' });
+    }
+  });
+  
+
   module.exports = router;
