@@ -4,11 +4,31 @@
   import { OrbitControls } from '@react-three/drei';
   import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
   import { Link } from 'react-router-dom';
+  import { jwtDecode } from "jwt-decode";
+  import { ToastContainer, toast } from 'react-toastify';
+  import 'react-toastify/dist/ReactToastify.css';
 
-  const ProductCard = ({ gltfPath, title, discription, price, positionY, initialScale,_id }) => {
+  const token = localStorage.getItem('token');
+
+  if (token) {
+    try {
+      const decoded = jwtDecode(token);
+      console.log(decoded);
+      console.log(decoded.id);
+    } catch (error) {
+      console.error("Error decoding token:", error.message);
+      // Handle the decoding error (e.g., display an error message)
+    }
+  } else {
+    console.log("No token found in local storage");
+    // Handle missing token (e.g., redirect to login)
+  }
+
+  const ProductCard = ({ gltfPath, title, discription, price, positionY, initialScale, _id, imgsrc }) => {
     const controlsRef = useRef();
     const [model, setModel] = useState(null);
     const [loadModelError, setLoadModelError] = useState(null);
+
 
     useEffect(() => {
       const loader = new GLTFLoader();
@@ -25,29 +45,143 @@
         setLoadModelError(error);
       });
     }, [gltfPath, initialScale, positionY]);
+    
+    
+    
+  // Assuming you have a toast library
+
+  const handleAddToCart = async () => {
+    const tokenhandle = localStorage.getItem('token');
+
+    if (tokenhandle) {
+      try {
+        const decoded = jwtDecode(tokenhandle);
+        const orderData = {
+          userid: decoded.id,
+          title,
+          imgsrc,
+          price,
+          quantity: 1,
+          isorder: false,
+          orderId: _id // Send _id as orderId
+        };
+
+        // Show loading indicator (optional)
+
+        const response = await fetch('http://localhost:3000/api/userorder/addtocart', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(orderData)
+        });
+
+        if (!response.ok) {
+          const errorData = await response.json(); // Parse error response for specific details
+          if (errorData.message === 'Duplicate item in cart') {
+            toast.info('You already have this product in your cart.', {
+              position: "top-right",
+              autoClose: 4000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "light"
+            });
+            console.log('Duplicate item in cart');
+          } else {
+            toast.info('An error occurred while adding to cart:', {
+              position: "top-right",
+              autoClose: 4000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "light"
+            });
+            console.error('Error adding item to cart:', errorData.message);
+          }
+        } else {
+          // Hide loading indicator (optional)
+          toast.success('Item added to cart successfully', {
+            position: "top-right",
+            autoClose: 4000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light"
+          });
+          console.log('Item added to cart successfully');
+        }
+      } catch (error) {
+        console.error('Error adding item to cart:', error);
+        toast.info('An unexpected error occurred. Please try again later.', {
+          position: "top-right",
+          autoClose: 4000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light"
+        });
+      }
+    } else {
+      toast.info('Login for add item to cart', {
+        position: "top-right",
+        autoClose: 4000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light"
+      });
+    }
+  };
+
+
+
 
     if (loadModelError) {
       return <div>Error loading model: {loadModelError.message}</div>;
     }
-      
-    return (
+
+    return (<>
+
       <div className="flex flex-col px-5 pt-5 pb-5 mx-[15px] my-[20px] bg-white shadow-2xl max-w-[380px] max-h-[480px] rounded-[25px]">
-        
-         <Link to={`/products?gltfPath=${gltfPath}&title=${title}&discription=${discription}&price=${price}&positionY=${positionY}&initialScale=${initialScale}`}>
-        <div className="shrink-0 rounded-[20px] bg-zinc-300 h-[282px]">
-          <Canvas
-            className="product-canvas rounded-[15px]"
-            camera={{ position: [0, 0, 5] }}
-            gl={{ alpha: true }}
-            style={{ background: 'linear-gradient(to bottom, #cfd9df, #e2ebf0)' }}
-          >
-            <ambientLight intensity={0.5} color="#ffffff" />
-            <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} />
-            <OrbitControls ref={controlsRef} />
-            {model && <primitive object={model} />}
-          </Canvas>
-        </div>
+        <Link to={`/products?gltfPath=${gltfPath}&title=${title}&discription=${discription}&price=${price}&positionY=${positionY}&initialScale=${initialScale}&imgsrc=${imgsrc}&_id=${_id}`}>
+          <div className="shrink-0 rounded-[20px] bg-zinc-300 h-[282px]">
+            <Canvas
+              className="product-canvas rounded-[15px]"
+              camera={{ position: [0, 0, 5] }}
+              gl={{ alpha: true }}
+              style={{ background: 'linear-gradient(to bottom, #cfd9df, #e2ebf0)' }}
+            >
+              <ambientLight intensity={0.5} color="#ffffff" />
+              <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} />
+              <OrbitControls ref={controlsRef} />
+              {model && <primitive object={model} />}
+            </Canvas>
+
+          </div>
         </Link>
+        <ToastContainer
+          position="top-right"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="light"
+        />
         <div className="flex gap-0.5 items-start mt-10">
           <div className="flex flex-col grow self-start w-fit">
             <h2 className="text-base text-black">{title}</h2>
@@ -56,6 +190,7 @@
               <button
                 className="flex gap-1.0 px-2.5 py-1.5 text-sm text-white rounded-xl bg-neutral-700 hover:bg-neutral-800"
                 style={{ minWidth: '100px' }}
+                onClick={handleAddToCart}
               >
                 <img
                   loading="lazy"
@@ -81,6 +216,8 @@
           </div>
         </div>
       </div>
+
+    </>
     );
   };
 
@@ -123,10 +260,6 @@
       setPriceFilter(event.target.value);
     };
 
-    const handleSearchChange = (event) => {
-      setSearchTerm(event.target.value);
-    };
-
     const paginate = (pageNumber) => {
       setCurrentPage(pageNumber);
     };
@@ -149,7 +282,7 @@
     const currentProducts = filteredProducts.slice(indexOfFirstProduct, indexOfLastProduct);
 
     return (
-      <div className="mt-10">
+      <div className="mt-10"  id="products">
         <div className="flex justify-center">
           <p className="text-[40px] font-bold text-green-950">Our Products</p>
         </div>
@@ -176,6 +309,7 @@
               positionY={product.positionY}
               discription={product.discription}
               _id={product._id}
+              imgsrc={product.imgsrc}
             />
           ))}
         </div>

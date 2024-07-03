@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate hook
-
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../AuthContext';
 import Navbar from '../homecontainer/Navbar';
 import Footer from '../homecontainer/Footer';
 
-// InputField component definition (unchanged)
 const InputField = ({ label, type = "text", value, onChange, error }) => (
   <div className="mt-4">
     <label className="block text-sm font-medium text-zinc-600 mb-1">
@@ -21,12 +20,13 @@ const InputField = ({ label, type = "text", value, onChange, error }) => (
     {error && <span className="text-red-500 text-xs">{error}</span>}
   </div>
 );
-// LogInForm component definition with redirection logic
+
 function LogInForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({});
-  const navigate = useNavigate(); // Utilize useNavigate hook
+  const navigate = useNavigate();
+  const { handleLogin } = useAuth();
 
   const validateEmail = (email) => {
     const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -52,24 +52,18 @@ function LogInForm() {
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
     } else {
-      // Send login data to backend
       axios.post('http://localhost:3000/api/person/login', {
         email,
         password,
       })
         .then(response => {
           const { token } = response.data;
-          // Store token in localStorage or sessionStorage for future use
-          localStorage.setItem('token', token);
-          console.log("Login successful. Token:", token);
-        
-          // Redirect to home page after successful login
-          navigate('/'); // Navigate to the home page route
+          handleLogin(token); // Use handleLogin from AuthContext
+          navigate('/');
         })
         .catch(error => {
           console.error("Login failed:", error);
-          // Handle login failure, possibly update state to display error message
-          setErrors({ email: 'Invalid username or password' }); // Example error handling
+          setErrors({ email: 'Invalid username or password' });
         });
     }
   };
@@ -106,7 +100,6 @@ function LogInForm() {
   );
 }
 
-// Login component (unchanged)
 const Login = () => {
   return (
     <>
@@ -132,4 +125,5 @@ const Login = () => {
     </>
   )
 }
+
 export default Login;

@@ -7,6 +7,13 @@ import { OrbitControls } from '@react-three/drei';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { Link, useParams } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
+import { jwtDecode } from "jwt-decode";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
+
+
+
 
 
 const ProductCard = ({ gltfPath, positionY, initialScale }) => {
@@ -55,14 +62,130 @@ const ProductCard = ({ gltfPath, positionY, initialScale }) => {
           <OrbitControls ref={controlsRef} />
           {model && <primitive object={model} />}
         </Canvas>
+        <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
       </div>
     </div>
   );
 };
 
 const AddToCartButton = () => {
+
+  const location = useLocation();
+  const params = new URLSearchParams(location.search);
+  const title = params.get('title');
+  const price = params.get('price');
+  const imgsrc =params.get('imgsrc');
+  const _id =params.get('_id');
+
+   const handleAddToCart = async () => {
+    const tokenhandle = localStorage.getItem('token');
+
+    if (tokenhandle) {
+      try {
+        const decoded = jwtDecode(tokenhandle);
+        const orderData = {
+          userid: decoded.id,
+          title,
+          imgsrc,
+          price,
+          quantity: 1,
+          isorder: false,
+          orderId: _id // Send _id as orderId
+        };
+  
+        // Show loading indicator (optional)
+  
+        const response = await fetch('http://localhost:3000/api/userorder/addtocart', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(orderData)
+        });
+  
+        if (!response.ok) {
+          const errorData = await response.json(); // Parse error response for specific details
+          if (errorData.message === 'Duplicate item in cart') {
+            toast.info('You already have this product in your cart.', {
+              position: "top-right",
+              autoClose: 4000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "light"
+            });
+            console.log('Duplicate item in cart');
+          } else {
+            toast.info('An error occurred while adding to cart:', {
+              position: "top-right",
+              autoClose: 4000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "light"
+            });
+            console.error('Error adding item to cart:', errorData.message);
+          }
+        } else {
+          // Hide loading indicator (optional)
+          toast.success('Item added to cart successfully', {
+            position: "top-right",
+            autoClose: 4000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light"
+          });
+          console.log('Item added to cart successfully');
+        }
+      } catch (error) {
+        console.error('Error adding item to cart:', error);
+        toast.info('An unexpected error occurred. Please try again later.', {
+          position: "top-right",
+          autoClose: 4000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light"
+        });
+      }
+    } else {
+      toast.info('Login for add item to cart', {
+        position: "top-right",
+        autoClose: 4000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light"
+      });
+    }
+  };
+
   return (
-    <button className="flex gap-1 px-5 w-2/12 py-1.5 mt-7 text-base font-bold text-justify text-white bg-black rounded-3xl">
+    <button className="flex gap-1 px-5 w-2/12 py-1.5 mt-7 text-base font-bold text-justify text-white bg-black rounded-3xl"
+     onClick={handleAddToCart}
+    >
       <img
         loading="lazy"
         src="https://cdn.builder.io/api/v1/image/assets/TEMP/5e55fa33744fd7794ef2a1b0f03402a432c0dd4869c54a3a6f18449249ad8afe?apiKey=980db322e33a4a39a5052caa449e1da6&"
@@ -107,22 +230,44 @@ const MainProduct = () => {
   const price = params.get('price');
   const positionY = params.get('positionY');
   const initialScale = params.get('initialScale');
-  
- console.log(discription);
+  const imgsrc = params.get('imgsrc');
 
-
-  const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    console.log('Params:', params);
-    console.log('discription'),discription;
-  }, [params]);
+    const token = localStorage.getItem('token');
+    if (token) {
+      try {
+        const decoded = jwtDecode(token);
+        const _id = decoded.id;
+
+        fetch(`http://localhost:3000/api/person/users/${_id}`)
+          .then(response => response.json())
+          .then(data => {
+            setUser(data.user);
+            setLoading(false);
+          })
+          .catch(error => {
+            console.error('Error fetching user data:', error);
+            setLoading(false);
+          });
+      } catch (error) {
+        console.error("Error decoding token:", error.message);
+        setLoading(false);
+      }
+    } else {
+      setLoading(false);
+    }
+  }, []);
+
+  const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
 
   return (
     <>
       <Navbar />
       <div
-        className={`px-4 py-8 mt-28 mb-20 bg-white rounded-3xl shadow-xl ${
+        className={`px-4 py-8 mt-[150px] mb-20 bg-white rounded-3xl shadow-xl ${
           isMobile ? "max-w-full" : "max-w-[898px] mx-auto"
         }`}
       >

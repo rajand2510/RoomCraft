@@ -1,12 +1,15 @@
-import * as React from "react";
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { ToastContainer, toast } from 'react-toastify';
+import { useAuth } from '../../AuthContext';
 
-const NavItem = ({ to, children }) => (
-  <Link to={to} className="cursor-pointer">
-    {children}
-  </Link>
-);
+const NavItem = ({ to, children }) => {
+  return (
+    <Link to={to} className="cursor-pointer">
+      {children}
+    </Link>
+  );
+};
 
 const Button = ({ children, className, onClick }) => (
   <button
@@ -19,19 +22,15 @@ const Button = ({ children, className, onClick }) => (
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-
-  const [cartItems, setCartItems] = useState(0);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
+  const [cartItems, setCartItems] = useState(0);
 
-  const [isLoggedIn, setIsLoggedIn] = useState(() => {
-    const token = localStorage.getItem('token');
-    return token !== null;
-  });
+  const { isLoggedIn, handleLogout } = useAuth();
 
   const navItems = [
-    { text: "Home", path: "/" },
-    { text: "Products", path: "/products" },
-    { text: "About Us", path: "/about" },
+    { text: 'Home', path: '/' },
+    { text: 'Products', path: '/products' },
+    { text: 'About Us', path: '/about' },
   ];
 
   const toggleMenu = () => {
@@ -42,13 +41,6 @@ const Navbar = () => {
     setIsProfileOpen(!isProfileOpen);
   };
 
-  const handleLogout = () => {
-    setIsLoggedIn(false);
-    setIsProfileOpen(false);
-    localStorage.removeItem('token');
-    
-  };
-
   return (
     <header className="fixed top-0 z-50 w-full bg-green-950 text-white px-16 text-lg">
       <div className="flex gap-5 justify-between w-full max-w-[1473px] max-md:flex-wrap max-md:max-w-full">
@@ -56,7 +48,7 @@ const Navbar = () => {
           loading="lazy"
           src="/image/logo.png"
           alt=""
-          className={`shrink-0 max-w-full aspect-[2.5] w-[200px] max-md:w-[150px] ${isMenuOpen ? "hidden" : ""}`}
+          className={`shrink-0 max-w-full aspect-[2.5] w-[200px] max-md:w-[150px] ${isMenuOpen ? 'hidden' : ''}`}
         />
         <nav className="flex gap-5 justify-between my-auto max-md:flex-wrap max-md:max-w-full">
           <div className="flex gap-8 justify-between my-auto">
@@ -77,8 +69,7 @@ const Navbar = () => {
               </svg>
             </button>
             <div
-              className={`flex gap-8 justify-between my-auto md:flex ${isMenuOpen ? "block" : "hidden"
-                } max-md:flex-col max-md:items-center`}
+              className={`flex gap-8 justify-between my-auto md:flex ${isMenuOpen ? 'block' : 'hidden'} max-md:flex-col max-md:items-center`}
             >
               {navItems.map((item, index) => (
                 <NavItem key={index} to={item.path}>
@@ -89,12 +80,13 @@ const Navbar = () => {
                 <div className="flex gap-6 items-center">
                   <div className="relative">
                     <NavItem to="/Checkout">
-                      <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/46a7ade1f639c80316c5fc49416c181e2db3522c89bd63a467f1817d6904d0de?apiKey=980db322e33a4a39a5052caa449e1da6&" alt="" />
-                     
-                        <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
-                          {cartItems}
-                        </span>
-                    
+                      <img
+                        src="https://cdn.builder.io/api/v1/image/assets/TEMP/46a7ade1f639c80316c5fc49416c181e2db3522c89bd63a467f1817d6904d0de?apiKey=980db322e33a4a39a5052caa449e1da6&"
+                        alt=""
+                      />
+                      <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                        {cartItems}
+                      </span>
                     </NavItem>
                   </div>
                   <div className="relative">
@@ -108,10 +100,7 @@ const Navbar = () => {
                     </div>
                     {isProfileOpen && (
                       <div className="absolute right-0 mt-2 w-48 bg-white text-black rounded-lg shadow-lg py-2">
-                        
-                        <Button className="w-full text-left px-4 py-2">
-                          My Order
-                        </Button>
+                        <Button className="w-full text-left px-4 py-2">My Order</Button>
                         <Button className="w-full text-left px-4 py-2" onClick={handleLogout}>
                           Log out
                         </Button>
@@ -143,6 +132,18 @@ const Navbar = () => {
           )}
         </nav>
       </div>
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
     </header>
   );
 };

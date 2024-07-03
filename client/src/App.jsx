@@ -9,7 +9,8 @@ import Home from './components/homecontainer/Home';
 import Login from './components/Userauthcontainer/Login';
 import Signup from './components/Userauthcontainer/Signup';
 import Checkout from './components/Userauthcontainer/Checkout';
- import MainProduct from './components/product/MainProduct';
+import MainProduct from './components/product/MainProduct';
+
 function App() {
   return (
 <Routes>
@@ -22,6 +23,7 @@ function App() {
 <Route path="/xr-cube" element={<XrCubeConatainer />}/>
 <Route path="/xr-hit-cube" element={<XrCubeConatainer />}/>
 <Route path="/xr" element={<XrHitModelConatainer />}/>
+
 </Routes>
 
   )

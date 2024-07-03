@@ -2,6 +2,8 @@ const express = require('express');
 const router = express.Router();
 const Person = require('./../models/Person');
 const {jwtAuthMiddleware, generateToken} = require('./../jwt');
+const mongoose = require('mongoose');
+
 
 // POST route to add a person
 router.post('/signup', async (req, res) =>{
@@ -60,21 +62,34 @@ router.post('/login', async(req, res) => {
     }
 });
 
-// Profile route
-router.get('/profile', jwtAuthMiddleware, async (req, res) => {
-    try{
-        const userData = req.user;
-        console.log("User Data: ", userData);
-
-        const userId = userData.id;
-        const user = await Person.findById(userId);
-
-        res.status(200).json({user});
-    }catch(err){
-        console.error(err);
-        res.status(500).json({ error: 'Internal Server Error' });
+// Assuming you have a separate Mongoose model for items (e.g., Item)
+router.get('/users/:id', async (req, res) => {
+    try {
+      // Extract user ID from request parameter
+      const _id = req.params.id;
+  
+      // Validate user ID (optional for security and robustness)
+      if (!mongoose.Types.ObjectId.isValid(_id)) {
+        return res.status(400).json({ error: 'Invalid user ID' });
+      }
+  
+      // Find user by ID using Mongoose
+      const user = await Person.findById(_id);
+  
+      // Handle user not found (optional for improved user experience)
+      if (!user) {
+        return res.status(404).json({ error: 'User not found' });
+      }
+  
+      // Send successful response with user details (exclude password)
+      res.status(200).json({ user: { name: user.name, email: user.email, mobile: user.mobile, address: user.address } });
+    } catch (err) {
+      console.error('Error retrieving user:', err);
+      res.status(500).json({ error: 'Internal Server Error' });
     }
-})
+  });
+  
+  
 
 // GET method to get the person
 router.get('/', jwtAuthMiddleware, async (req, res) =>{

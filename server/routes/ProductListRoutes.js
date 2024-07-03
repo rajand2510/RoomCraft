@@ -29,6 +29,8 @@ router.get('/products', async (req, res) =>{
     }
 })
 
+
+
 // router.get('/:taste', async (req, res) =>{
 //     try{
 //         const tasteType = req.params.taste; // // Extract the taste type from the URL parameter

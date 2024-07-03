@@ -25,6 +25,10 @@ const productList = new mongoose.Schema({
         type:String,
         required:true,
     },
+    imgsrc:{
+        type:String,
+        required:true,
+    },
     initialScale:{
         type:String,
         required:true,
