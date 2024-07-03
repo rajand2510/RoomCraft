@@ -1,7 +1,7 @@
 
 const mongoose = require('mongoose');
 
-const userorder = new mongoose.Schema({
+const cartorder = new mongoose.Schema({
     userId:{
         type:String,
         required:true,
@@ -32,6 +32,6 @@ const userorder = new mongoose.Schema({
     }
 })
 
-const UserOrder = mongoose.model('UserOrder', userorder);
+const CartOrder = mongoose.model('CartOrder', cartorder);
 
-module.exports = UserOrder;
+module.exports = CartOrder;

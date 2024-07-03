@@ -33,12 +33,14 @@ app.get('/', (req, res) => {
 const personRoutes = require('./routes/personRoutes'); // Ensure this path is correct
 const productListRoutes = require('./routes/ProductListRoutes'); // Ensure this path is correct
 const userorderRoutes = require('./routes/UserOrderRoutes');
-const orderdoneRoutes = require('./routes/OrderDoneRoutes')
+const orderdoneRoutes = require('./routes/OrderDoneRoutes');
+const cartorderRoutes = require('./routes/CartOrderRoutes')
 // Use the routers
 app.use('/api/person', personRoutes);
 app.use('/api/productlist', productListRoutes);
 app.use('/api/userorder', userorderRoutes);
-app.use('/api/ordered',orderdoneRoutes)
+app.use('/api/ordered',orderdoneRoutes);
+app.use('/api/cart',cartorderRoutes);
 // Error handling middleware
 app.use((err, req, res, next) => {
   console.error(err.stack);
