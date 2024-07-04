@@ -21,6 +21,7 @@
     "react-responsive": "^10.0.0",
     "react-router-dom": "^6.24.0",
     "react-toastify": "^10.0.5",
+    "react-uuid": "^2.0.0",
     "three": "^0.148.0"
   },
   "devDependencies": {

@@ -25,9 +25,6 @@ app.use(logRequest);
 app.use(passport.initialize());
 const localAuthMiddleware = passport.authenticate('local', { session: false });
 
-app.get('/', (req, res) => {
-  res.send('Welcome to our Hotel');
-});
 
 // Import router files
 const personRoutes = require('./routes/personRoutes'); // Ensure this path is correct

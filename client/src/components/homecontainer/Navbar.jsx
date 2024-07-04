@@ -126,7 +126,7 @@ const Navbar = () => {
                     </div>
                     {isProfileOpen && (
                       <div className="absolute right-0 mt-2 w-48 bg-white text-black rounded-lg shadow-lg py-2">
-                        <Button className="w-full text-left px-4 py-2">My Order</Button>
+                      <Link to="/myorder"> <Button className="w-full text-left px-4 py-2">My Order</Button></Link> 
                         <Button className="w-full text-left px-4 py-2" onClick={handleLogout}>
                           Log out
                         </Button>

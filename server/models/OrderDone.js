@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 
 
 const orderdone = new mongoose.Schema({
-    userid:{
+    userId:{
         type:String,
         required:true,
     },
@@ -23,7 +23,7 @@ const orderdone = new mongoose.Schema({
         type:Number,
         required:true,
     },
-    ordered: {
+    orderId: {
         type: String,
         required: true,
     }

@@ -2,6 +2,11 @@ const express = require('express');
 const router = express.Router();
 const CartOrder = require('../models/CartOrder');
 
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+
+//for product list component
+
 router.post('/addcart', async (req, res) =>{
     try{
         const data = req.body
@@ -30,6 +35,10 @@ router.get('/cartlist', async (req, res) => {
       res.status(500).json({ error: 'Internal Server Error' });
   }
 });
+
+///////////////////////////////////////////////////////////////////////////////
+
+// checkout component
 
 router.get('/cart_count', async (req, res) => {
     try {
@@ -72,5 +81,27 @@ router.delete('/cartdelete', async (req, res) => {
     }
   });
   
+  router.put('/quntityput', async (req, res) => {
+    try {
+      const _id = req.query._id;
+      const quantity = req.query.quantity;
+  
+      if (!quantity || quantity <= 0) {
+        return res.status(400).json({ error: 'Invalid quantity' });
+      }
+  
+      const updatedOrder = await CartOrder.findByIdAndUpdate(_id, { $set: { quantity } }, { new: true });
+      if (!updatedOrder) {
+        return res.status(404).json({ error: 'Order not found' });
+      }
+      res.status(200).json({ message: 'Order quantity updated successfully' });
+    } catch (err) {
+      console.log(err);
+      res.status(500).json({ error: 'Internal Server Error' });
+    }
+  });
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
 
   module.exports = router;
