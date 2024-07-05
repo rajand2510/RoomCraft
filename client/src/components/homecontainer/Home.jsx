@@ -1,7 +1,7 @@
 import Footer from "./Footer"
 import Hero from "./Hero"
 import Navbar from "./Navbar"
-// import ProductList from "../product/ProductList"
+ import ProductList from "../product/ProductList"
 
 
 const Home = () => {
@@ -9,7 +9,7 @@ const Home = () => {
   <>
   <Navbar/>
   <Hero/>
-  {/* <ProductList/> */}
+  <ProductList/>
   <Footer/>
   </>
   )
