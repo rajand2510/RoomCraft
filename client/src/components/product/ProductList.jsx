@@ -251,8 +251,8 @@ const { updateCartItems } = useCart();
   
       loadProducts();
     }, []);
-    setProductsPerPage.apply()
-    setSearchTerm.apply()
+    
+
     const handlePriceFilterChange = (event) => {
       setPriceFilter(event.target.value);
     };
