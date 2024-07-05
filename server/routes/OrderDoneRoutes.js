@@ -15,10 +15,10 @@ router.get('/orderlist', async (req, res) =>{
     }
 })
 
-router.get('/userorder', async (req, res) =>{
+router.get('/myordered', async (req, res) =>{
     try{
         const userId = req.query.userId; 
-        const data = await CartOrder.find({ userId: userId });
+        const data = await OrderDone.find({ userId: userId });
         console.log('data fetched');
         res.status(200).json(data);
     }catch(err){

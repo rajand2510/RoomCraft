@@ -1,4 +1,4 @@
-import React from 'react';
+
 import Spline from '@splinetool/react-spline';
 import { useMediaQuery } from 'react-responsive';
 
@@ -8,9 +8,9 @@ const Hero = () => {
   return (
     <>
       {isMobile ? (
-        <Spline scene="https://prod.spline.design/gYwJn0w264BfpUen/scene.splinecode" />
+        <Spline loading="eager" scene="https://prod.spline.design/gYwJn0w264BfpUen/scene.splinecode" />
       ) : (
-        <Spline scene="https://prod.spline.design/Lq8gdfcvLF7j66MD/scene.splinecode" />
+        <Spline loading="eager" scene="https://prod.spline.design/Lq8gdfcvLF7j66MD/scene.splinecode" />
       )}
         <section>
         <img

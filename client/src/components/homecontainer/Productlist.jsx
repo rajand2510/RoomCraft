@@ -8,7 +8,7 @@
   import { ToastContainer, toast } from 'react-toastify';
   import 'react-toastify/dist/ReactToastify.css';
   import { useCart } from '../../CartContext'; 
-  
+  import apiService from "../api/apiService";
 
 
   const token = localStorage.getItem('token');
@@ -182,7 +182,7 @@ const { updateCartItems } = useCart();
        
         <div className="flex gap-0.5 items-start mt-10">
           <div className="flex flex-col grow self-start w-fit">
-            <h2 className="text-base text-black">{title}</h2>
+            <h2 className="text-base text-black truncate  max-w-[270px] overflow-hidden">{title}</h2>
             <div className="flex gap-8 mt-7 font-bold">
               <p className="my-auto text-xl text-black">Rs.{price}</p>
               <button
@@ -237,22 +237,21 @@ const { updateCartItems } = useCart();
     }
 
     useEffect(() => {
-      const fetchProducts = async () => {
+      const loadProducts = async () => {
         try {
-          const response = await fetch('http://localhost:3000/api/productlist/products');
-          if (!response.ok) {
-            throw new Error('Failed to fetch products');
-          }
-          const data = await response.json();
-          setProducts(data);
+          const productsData = await apiService.fetchProducts();
+          setProducts(productsData);
         } catch (error) {
+          setError('Failed to load products');
           console.error('Error fetching products:', error);
-          // Handle error state as needed
+        } finally {
+          setLoading(false);
         }
       };
-
-      fetchProducts();
+  
+      loadProducts();
     }, []);
+    
 
     const handlePriceFilterChange = (event) => {
       setPriceFilter(event.target.value);

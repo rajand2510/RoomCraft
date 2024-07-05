@@ -1,12 +1,12 @@
 import Navbar from "../components/homecontainer/Navbar";
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import { jwtDecode } from "jwt-decode"; // Correct import statement for jwtDecode
+import { jwtDecode } from "jwt-decode"; 
 import { useCart } from '../CartContext';
 import { Link } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
+import { v4 as uuid } from "uuid";
 
 
 const ProductCard = ({ _id, imgsrc, title, price, onDelete, quantity, onQuantityChange }) => {
@@ -117,6 +117,7 @@ const Checkout = () => {
             const token = localStorage.getItem('token');
             if (!token) {
                 throw new Error('Token not found in localStorage');
+                
             }
 
             const decoded = jwtDecode(token);
@@ -208,7 +209,8 @@ const Checkout = () => {
         const decoded = jwtDecode(token);
         const userId = decoded.id;
 
-        const orderId = new Date().toISOString();
+        const unique_id = uuid();
+        const orderId = unique_id.slice(0, 23);
         const productsData = products.map((product) => ({
             userId: userId,
             title: product.title,
@@ -226,6 +228,18 @@ const Checkout = () => {
                 // Payment successful, update cart and redirect to success page
                 updateCartItems(0);
               
+                  setTimeout(() => {
+                    toast.success('Ordered Successfully.', {
+                        position: "top-right",
+                        autoClose: 2000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                        theme: "light"
+                      });
+                  }, 2000);
                 products.forEach(product => {
                     handleDeleteProduct(product._id);
                 });
@@ -239,16 +253,41 @@ const Checkout = () => {
             alert(`Payment failed: ${error.message}`);
         }
     };
+    // const payment = () => {
 
+    //     const navigate = useNavigate()
+    
+    //     const data = {
+    //         name: 'Vikas',
+    //         amount: 1,
+    //         number: '9999999999',
+    //         MUID: "MUID" + Date.now(),
+    //         transactionId: 'T' + Date.now(),
+    //     }
+    
+    //     const handlePayment = async (e) => {
+    //         e.preventDefault();
+    
+    //         let res = await axios.post('http://localhost:8000/order', { ...data }).then(res => {
+    
+    //             console.log(res)
+    //             if (res.data && res.data.data.instrumentResponse.redirectInfo.url) {
+    //                 window.location.href = res.data.data.instrumentResponse.redirectInfo.url;
+    //             }
+    //         })
+    //             .catch(error => {
+    //                 console.error(error);
+    //             });
+    
 
     return (
         <>
             <Navbar />
             <main>
             <ToastContainer/>
-                <div className="flex gap-5 ml-28 mt-10 max-md:ml-0 max-md:flex-col max-md:gap-0">
-                    <section className="flex flex-col w-5/12 max-md:ml-0 max-md:w-full">
-                        <div className="flex flex-col grow px-5 pt-14 pb-7 w-full bg-white rounded-3xl shadow-sm max-md:pl-5 max-md:mt-10 max-md:max-w-full">
+                <div className="flex gap-5 mt-20 ml-28 mt-10 max-md:ml-0 max-md:flex-col max-md:gap-0">
+                    <section className="flex flex-col w-5/12 h-[600px] max-md:ml-0 max-md:w-full">
+                        <div className="flex flex-col grow px-5 pt-14 pb-7 w-full bg-white rounded-3xl shadow-2xl max-md:pl-5 max-md:mt-10 max-md:max-w-full">
                             <h1 className="self-center text-2xl font-bold text-justify text-black">
                                 Check Out
                             </h1>
