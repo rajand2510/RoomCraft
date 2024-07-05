@@ -8,9 +8,8 @@ const bodyParser = require('body-parser');
 
 const PORT = process.env.PORT || 3000;
 
-// Middleware setup
 app.use(cors({
-  origin: 'http://localhost:5173',
+  origin: '*',
   credentials: true
 }));
 app.use(bodyParser.json()); // Parse JSON requests
@@ -24,6 +23,37 @@ app.use(logRequest);
 
 app.use(passport.initialize());
 const localAuthMiddleware = passport.authenticate('local', { session: false });
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+const Razorpay = require('razorpay');
+
+
+const razorpay = new Razorpay({
+  key_id: 'rzp_test_AfONR4lsl3UPRI',
+  key_secret: 'vmvaLRN44fu7HfjjG731taaD',
+});
+
+app.post('/createOrder', async (req, res) => {
+  const { amount, currency, receipt } = req.body;
+
+  try {
+    const options = {
+      amount: amount * 100, // amount in the smallest currency unit
+      currency,
+      receipt,
+    };
+    const order = await razorpay.orders.create(options);
+    res.json(order);
+  } catch (error) {
+    res.status(500).send(error);
+  }
+});
+
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
 // Import router files

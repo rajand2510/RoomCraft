@@ -5,7 +5,7 @@ import { jwtDecode } from "jwt-decode";
 import { useCart } from '../CartContext';
 import { Link } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import 'react-toastify/dist/ReactToastify.css';     
 import { v4 as uuid } from "uuid";
 
 
@@ -185,51 +185,69 @@ const Checkout = () => {
     }
 
 
-    const handlePayment = async () => {
-
-        const token = localStorage.getItem('token');
-        if (!token) {
-            console.error('No token found');
-            return;
-        }
-
-        if  (totalprice==0){
-            toast.info('You have to add item first.', {
-                position: "top-right",
-                autoClose: 2000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: "light"
-              });
-            return;
-        }
-        const decoded = jwtDecode(token);
-        const userId = decoded.id;
-
-        const unique_id = uuid();
-        const orderId = unique_id.slice(0, 23);
-        const productsData = products.map((product) => ({
-            userId: userId,
-            title: product.title,
-            imgsrc: product.imgsrc,
-            price: product.price,
-            quantity: product.quantity,
-            orderId,
-        }));
-
-        console.log(productsData);
-
+    const loadRazorpay = () => {
+        return new Promise((resolve, reject) => {
+          const script = document.createElement('script');
+          script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+          script.onload = resolve;
+          script.onerror = reject;
+          document.body.appendChild(script);
+        });
+      };
+    
+      const handlePayment = async () => {
         try {
-            const response = await axios.post(`http://localhost:3000/api/ordered/orderitem`, productsData);
-            if (response.status === 200) {
-                // Payment successful, update cart and redirect to success page
-                updateCartItems(0);
-              
-                  setTimeout(() => {
-                    toast.success('Ordered Successfully.', {
+          await loadRazorpay();
+          const response = await axios.post('http://localhost:3000/createOrder', {
+            amount: totalprice, // Convert to smallest currency unit (in paise for INR)
+            currency: 'INR',
+            receipt: 'receipt#1',
+          });
+    
+          const { id, amount, currency } = response.data;
+    
+          const options = {
+            key: 'rzp_test_AfONR4lsl3UPRI', // Replace with your actual Razorpay key
+            amount,
+            currency,
+            order_id: id,
+            name: 'RoomCraft',
+            description: 'Test Transaction',
+            image: 'https://i.ibb.co/7Q2cbvB/Screenshot-2024-07-03-221223.png',
+            handler: function (response) {
+              // Payment success callback
+              const token = localStorage.getItem('token');
+              if (!token) {
+                console.error('No token found');
+                return;
+              }
+    
+              // Decode token to get user ID
+              const decoded = jwtDecode(token);
+              const userId = decoded.id;
+    
+              const unique_id = uuid();
+              const orderId = unique_id.slice(0, 23);
+    
+              const productsData = products.map((product) => ({
+                userId: userId,
+                title: product.title,
+                imgsrc: product.imgsrc,
+                price: product.price,
+                quantity: product.quantity,
+                orderId,
+              }));
+    
+              console.log(productsData);
+    
+              // Perform API call to place order with productsData
+              axios.post(`http://localhost:3000/api/ordered/orderitem`, productsData)
+                .then((response) => {
+                  if (response.status === 200) {
+                    // Payment successful, update cart and redirect to success page
+                    updateCartItems(0);
+                    setTimeout(() => {
+                      toast.success('Ordered Successfully.', {
                         position: "top-right",
                         autoClose: 2000,
                         hideProgressBar: false,
@@ -239,46 +257,54 @@ const Checkout = () => {
                         progress: undefined,
                         theme: "light"
                       });
-                  }, 2000);
-                products.forEach(product => {
-                    handleDeleteProduct(product._id);
+                    }, 2000);
+                    products.forEach(product => {
+                      handleDeleteProduct(product._id);
+                    });
+                    window.location.href = `/myorder`;
+                  } else {
+                    // Payment failed, show error message
+                    alert(`Payment failed: ${response.statusText}`);
+                  }
+                })
+                .catch((error) => {
+                  console.error(error);
+                  alert(`Payment failed: ${error.message}`);
                 });
-                window.location.href = `/myorder`;
-            } else {
-                // Payment failed, show error message
-                alert(`Payment failed: ${response.statusText}`);
-            }
+            },
+            prefill: {
+              name: 'John Doe',
+              email: 'john.doe@example.com',
+              contact: '9999999999',
+            },
+            notes: {
+              address: 'RoomCraft Corporate Office',
+            },
+            theme: {
+              color: '#3399cc',
+            },
+          };
+    
+          const rzp1 = new window.Razorpay(options);
+    
+          rzp1.on('payment.failed', function (response) {
+            alert(response.error.code);
+            alert(response.error.description);
+            alert(response.error.source);
+            alert(response.error.step);
+            alert(response.error.reason);
+            alert(response.error.metadata.order_id);
+            alert(response.error.metadata.payment_id);
+          });
+    
+          rzp1.open();
+    
         } catch (error) {
-            console.error(error);
-            alert(`Payment failed: ${error.message}`);
+          console.error('Error while loading Razorpay or creating order:', error);
         }
-    };
-    // const payment = () => {
+      };
 
-    //     const navigate = useNavigate()
-    
-    //     const data = {
-    //         name: 'Vikas',
-    //         amount: 1,
-    //         number: '9999999999',
-    //         MUID: "MUID" + Date.now(),
-    //         transactionId: 'T' + Date.now(),
-    //     }
-    
-    //     const handlePayment = async (e) => {
-    //         e.preventDefault();
-    
-    //         let res = await axios.post('http://localhost:8000/order', { ...data }).then(res => {
-    
-    //             console.log(res)
-    //             if (res.data && res.data.data.instrumentResponse.redirectInfo.url) {
-    //                 window.location.href = res.data.data.instrumentResponse.redirectInfo.url;
-    //             }
-    //         })
-    //             .catch(error => {
-    //                 console.error(error);
-    //             });
-    
+
 
     return (
         <>
@@ -371,3 +397,79 @@ const Checkout = () => {
 };
 
 export default Checkout;
+// import React, { useEffect } from 'react';
+// import axios from 'axios';
+
+// const RazorpayPayment = () => {
+//   const loadRazorpay = () => {
+//     return new Promise((resolve, reject) => {
+//       const script = document.createElement('script');
+//       script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+//       script.onload = resolve;
+//       script.onerror = reject;
+//       document.body.appendChild(script);
+//     });
+//   };
+
+//   const handlePayment = async () => {
+//     try {
+//       await loadRazorpay();
+//       const response = await axios.post('http://localhost:3000/createOrder', {
+//         amount: 500, // amount in INR
+//         currency: 'INR',
+//         receipt: 'receipt#1',
+//       });
+
+//       const { id, amount, currency } = response.data;
+
+//       const options = {
+//         key: 'rzp_test_AfONR4lsl3UPRI',
+//         amount,
+//         currency,
+//         order_id: id,
+//         name: 'RoomCraft',
+//         description: 'Test Transaction',
+//         image: 'https://example.com/your_logo',
+//         handler: function (response) {
+//           alert(`Payment ID: ${response.razorpay_payment_id}`);
+//           alert(`Order ID: ${response.razorpay_order_id}`);
+//           alert(`Signature: ${response.razorpay_signature}`);
+//         },
+//         prefill: {
+//           name: 'John Doe',
+//           email: 'john.doe@example.com',
+//           contact: '9999999999',
+//         },
+//         notes: {
+//           address: 'RoomCraft Corporate Office',
+//         },
+//         theme: {
+//           color: '#3399cc',
+//         },
+//       };
+
+//       const rzp1 = new window.Razorpay(options);
+//       rzp1.on('payment.failed', function (response) {
+//         alert(response.error.code);
+//         alert(response.error.description);
+//         alert(response.error.source);
+//         alert(response.error.step);
+//         alert(response.error.reason);
+//         alert(response.error.metadata.order_id);
+//         alert(response.error.metadata.payment_id);
+//       });
+
+//       rzp1.open();
+//     } catch (error) {
+//       console.error('Error while loading Razorpay or creating order:', error);
+//     }
+//   };
+
+//   return (
+//     <div>
+//       <button onClick={handlePayment}>Pay with Razorpay</button>
+//     </div>
+//   );
+// };
+
+// export default RazorpayPayment;

@@ -94,7 +94,7 @@ function LogInForm() {
       </button>
       <div className="flex gap-2 self-start mt-4 text-sm text-green-800">
         <p className="grow">Don't have an account</p>
-        <a href="#" className="font-bold">Sign up</a>
+        <a href="/signup" className="font-bold">Sign up</a>
       </div>
     </form>
   );
