@@ -242,17 +242,17 @@ const { updateCartItems } = useCart();
           const productsData = await apiService.fetchProducts();
           setProducts(productsData);
         } catch (error) {
-          setError('Failed to load products');
+          // setError('Failed to load products');
           console.error('Error fetching products:', error);
         } finally {
-          setLoading(false);
+          console.log("finaly")
         }
       };
   
       loadProducts();
     }, []);
-    
-
+    setProductsPerPage.apply()
+    setSearchTerm.apply()
     const handlePriceFilterChange = (event) => {
       setPriceFilter(event.target.value);
     };
