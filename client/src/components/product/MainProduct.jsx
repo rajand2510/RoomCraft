@@ -101,7 +101,7 @@ const AddToCartButton = () => {
         console.log(cartitemId);
   
         // Check if the product is already in the cart for the logged-in user
-        const response = await fetch(`http://localhost:3000/api/cart/cartlist?userId=${userId}&cartitemId=${cartitemId}`);
+        const response = await fetch(`https://room-craft-api.vercel.app/api/cart/cartlist?userId=${userId}&cartitemId=${cartitemId}`);
         const data = await response.json();
   
         if (data.length > 0) {
@@ -128,7 +128,7 @@ const AddToCartButton = () => {
             cartitemId: _id
           };
   
-          const addCartResponse = await fetch('http://localhost:3000/api/cart/addcart', {
+          const addCartResponse = await fetch('https://room-craft-api.vercel.app/api/cart/addcart', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json'
@@ -252,7 +252,7 @@ const MainProduct = () => {
         const decoded = jwtDecode(token);
         const _id = decoded.id;
 
-        fetch(`http://localhost:3000/api/person/users/${_id}`)
+        fetch(`https://room-craft-api.vercel.app/api/person/users/${_id}`)
           .then(response => response.json())
           .then(data => {
             setUser(data.user);

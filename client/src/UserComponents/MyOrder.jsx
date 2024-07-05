@@ -61,7 +61,7 @@ const MyComponent = () => {
       try {
 
         
-        const response = await axios.get(`http://localhost:3000/api/ordered/myordered?userId=${userId}`);
+        const response = await axios.get(`https://room-craft-api.vercel.app/api/ordered/myordered?userId=${userId}`);
         const orders = response.data;
 
         // Group orders by orderId
@@ -93,7 +93,7 @@ const MyComponent = () => {
         const decoded = jwtDecode(token);
         const userId = decoded.id;
 
-        axios.get(`http://localhost:3000/api/person/users/${userId}`)
+        axios.get(`https://room-craft-api.vercel.app/api/person/users/${userId}`)
             .then(response => {
                 const userData = response.data.user;
                 setUser({

@@ -52,7 +52,7 @@ function LogInForm() {
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
     } else {
-      axios.post('http://localhost:3000/api/person/login', {
+      axios.post('https://room-craft-api.vercel.app/api/person/login', {
         email,
         password,
       })

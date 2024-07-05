@@ -51,7 +51,7 @@ const Navbar = () => {
         const decoded = jwtDecode(tokenhandle);
         const userId = decoded.id;
 
-        axios.get('http://localhost:3000/api/cart/cart_count', {
+        axios.get('https://room-craft-api.vercel.app/api/cart/cart_count', {
           params: { userId },
           headers: { Authorization: `Bearer ${tokenhandle}` },
         })

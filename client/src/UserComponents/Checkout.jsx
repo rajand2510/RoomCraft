@@ -19,7 +19,7 @@ const ProductCard = ({ _id, imgsrc, title, price, onDelete, quantity, onQuantity
                 _id: _id,
                 quantity: newQuantity
             });
-            const url = `http://localhost:3000/api/cart/quntityput?${params.toString()}`;
+            const url = `https://room-craft-api.vercel.app/api/cart/quntityput?${params.toString()}`;
             fetch(url, {
                 method: 'PUT',
                 headers: {
@@ -45,7 +45,7 @@ const ProductCard = ({ _id, imgsrc, title, price, onDelete, quantity, onQuantity
                 _id: _id,
                 quantity: newQuantity
             });
-            const url = `http://localhost:3000/api/cart/quntityput?${params.toString()}`;
+            const url = `https://room-craft-api.vercel.app/api/cart/quntityput?${params.toString()}`;
             fetch(url, {
                 method: 'PUT',
                 headers: {
@@ -123,7 +123,7 @@ const Checkout = () => {
             const decoded = jwtDecode(token);
             const userId = decoded.id;
 
-            axios.get(`http://localhost:3000/api/person/users/${userId}`)
+            axios.get(`https://room-craft-api.vercel.app/api/person/users/${userId}`)
                 .then(response => {
                     const userData = response.data.user;
                     setUser({
@@ -134,7 +134,7 @@ const Checkout = () => {
                     });
                     setLoading(false);
 
-                    axios.get(`http://localhost:3000/api/cart/checkout`, {
+                    axios.get(`https://room-craft-api.vercel.app/api/cart/checkout`, {
                         params: { userId: userId }
                     })
                         .then(response => {
@@ -156,7 +156,7 @@ const Checkout = () => {
 
     const handleDeleteProduct = async (productId) => {
         try {
-            const response = await axios.delete(`http://localhost:3000/api/cart/cartdelete`, {
+            const response = await axios.delete(`https://room-craft-api.vercel.app/api/cart/cartdelete`, {
                 params: { _id: productId }
             });
             if (response.status === 200) {
@@ -198,7 +198,7 @@ const Checkout = () => {
       const handlePayment = async () => {
         try {
           await loadRazorpay();
-          const response = await axios.post('http://localhost:3000/createOrder', {
+          const response = await axios.post('https://room-craft-api.vercel.app/createOrder', {
             amount: totalprice, // Convert to smallest currency unit (in paise for INR)
             currency: 'INR',
             receipt: 'receipt#1',
@@ -241,7 +241,7 @@ const Checkout = () => {
               console.log(productsData);
     
               // Perform API call to place order with productsData
-              axios.post(`http://localhost:3000/api/ordered/orderitem`, productsData)
+              axios.post(`https://room-craft-api.vercel.app/api/ordered/orderitem`, productsData)
                 .then((response) => {
                   if (response.status === 200) {
                     // Payment successful, update cart and redirect to success page
