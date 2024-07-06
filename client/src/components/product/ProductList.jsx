@@ -165,7 +165,7 @@ const { updateCartItems } = useCart();
       <div className="flex flex-col px-5 pt-5 pb-5 mx-[15px] my-[20px] bg-white shadow-2xl max-w-[380px] max-h-[480px] rounded-[25px]">
         <Link to={`/products?gltfPath=${gltfPath}&title=${title}&discription=${discription}&price=${price}&positionY=${positionY}&initialScale=${initialScale}&imgsrc=${imgsrc}&_id=${_id}`}>
           <div className="shrink-0 rounded-[20px] bg-zinc-300 h-[282px]">
-            <Canvas
+            {/* <Canvas
               className="product-canvas rounded-[15px]"
               camera={{ position: [0, 0, 5] }}
               gl={{ alpha: true }}
@@ -175,8 +175,8 @@ const { updateCartItems } = useCart();
               <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} />
               <OrbitControls ref={controlsRef} />
               {model && <primitive object={model} />}
-            </Canvas>
-
+            </Canvas> */}
+                  <img src={imgsrc} alt={title}  className="h-[282px] w-[400px]" />
           </div>
         </Link>
        

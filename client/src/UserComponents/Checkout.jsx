@@ -311,8 +311,8 @@ const Checkout = () => {
             <Navbar />
             <main>
             <ToastContainer/>
-                <div className="flex gap-5 mt-20 ml-28 mt-10 max-md:ml-0 max-md:flex-col max-md:gap-0">
-                    <section className="flex flex-col w-5/12 h-[600px] max-md:ml-0 max-md:w-full">
+                <div className="flex gap-5 mt-20 ml-28 height max-md:ml-0 max-md:flex-col max-md:gap-0">
+                    <section className="flex flex-col w-5/12 h-full max-md:ml-0 max-md:w-full">
                         <div className="flex flex-col grow px-5 pt-14 pb-7 w-full bg-white rounded-3xl shadow-2xl max-md:pl-5 max-md:mt-10 max-md:max-w-full">
                             <h1 className="self-center text-2xl font-bold text-justify text-black">
                                 Check Out
