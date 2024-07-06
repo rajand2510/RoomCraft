@@ -10,6 +10,7 @@ import { v4 as uuid } from "uuid";
 import {Navigate} from 'react-router-dom'
 
 
+
 const ProductCard = ({ _id, imgsrc, title, price, onDelete, quantity, onQuantityChange }) => {
     const [localQuantity, setLocalQuantity] = useState(quantity);
 
@@ -246,7 +247,10 @@ const Checkout = () => {
                   if (response.status === 200) {
                     // Payment successful, update cart and redirect to success page
                     updateCartItems(0);
-                    setTimeout(() => {
+                    products.forEach(product => {
+                        handleDeleteProduct(product._id);
+                      });
+                 
                       toast.success('Ordered Successfully.', {
                         position: "top-right",
                         autoClose: 2000,
@@ -257,11 +261,9 @@ const Checkout = () => {
                         progress: undefined,
                         theme: "light"
                       });
-                    }, 2000);
-                    products.forEach(product => {
-                      handleDeleteProduct(product._id);
-                    });
-                    window.location.href = `/myorder`;
+                   
+                      return <Navigate to="/pagenotfound" replace />
+                   
                   } else {
                     // Payment failed, show error message
                     alert(`Payment failed: ${response.statusText}`);
