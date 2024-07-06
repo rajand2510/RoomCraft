@@ -2,7 +2,7 @@ import './error.css';
 const ToasterComponent = () => {
   return (
     <div>
-      <section className="page_404 ml-[130px]">
+      <section className="page_404 ml-[130px] max-md:ml-0">
      <div className="container">
       <div className="row">	
       <div className="col-sm-12 ">

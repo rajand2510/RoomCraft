@@ -118,7 +118,7 @@ const MyComponent = () => {
     <>
     <Navbar />
     <main className="flex gap-5 mt-36 mb-5 max-md:flex-col max-md:gap-0">
-      <section className="flex flex-col w-6/12 max-md:ml-0 max-md:w-full">
+      <section className="flex flex-col w-6/12  max-md:ml-0   max-md:w-[345px]">
         <div className="flex flex-col grow mt-1 mr-4 max-md:mt-10 max-md:max-w-full">
           <article className="flex flex-col px-6 pt-14 ml-8 pb-6 w-full bg-white rounded-3xl shadow-xl max-md:px-5 max-md:mt-10 max-md:max-w-full">
             <h2 className="self-center text-2xl font-bold text-justify text-black">
