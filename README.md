@@ -1,9 +1,8 @@
 # Roomcraft
 A 3D Home Decor E-commerce Website with AR Integration
 
-## Interactive 3D Model
+<img src=""https://i.ibb.co/rdh2jpn/Screenshot-2024-07-06-144706.png" alt="Roomcraft Logo - 3D Home Decor E-commerce Website" width="600" height="300">
 
-<Spline loading="eager" scene="https://prod.spline.design/gYwJn0w264BfpUen/scene.splinecode" style="width: 600px; height: 300px;" />
 
 
 ## Overview
