@@ -98,7 +98,7 @@ function LogInForm() {
          className="text-green-800 hover:text-green-600"
          onClick={(e) => {
           e.preventDefault();
-          navigate('/sign up');
+          navigate('/signup');
         }}>
           Log In
         </a>
