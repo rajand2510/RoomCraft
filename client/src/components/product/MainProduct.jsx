@@ -152,14 +152,13 @@ const AddToCartButton = () => {
           } else {
             toast.success('Item added to cart successfully', {
               position: "top-right",
-              autoClose: 2000,
-              hideProgressBar: false,
-              closeOnClick: true,
-              pauseOnHover: true,
-              draggable: true,
+              autoClose: 1000,
+              hideProgressBar: true,
+              closeOnClick: false,
+              pauseOnHover: false,
+              draggable: false,
               progress: undefined,
               theme: "light",
-              transition: "Bounce"
             });
             console.log('Item added to cart successfully');
             updateCartItems(data.newCartCount);
