@@ -3,7 +3,7 @@ A 3D Home Decor E-commerce Website with AR Integration
 
 ## Interactive 3D Model
 
-<Spline loading="eager" scene="https://prod.spline.design/gYwJn0w264BfpUen/scene.splinecode" />
+<Spline loading="eager" scene="https://prod.spline.design/gYwJn0w264BfpUen/scene.splinecode" style="width: 600px; height: 300px;" />
 
 
 ## Overview
