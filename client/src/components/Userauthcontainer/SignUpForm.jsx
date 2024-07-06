@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-
+import { useNavigate } from 'react-router-dom';
 const InputField = ({ label, type = "text", value, onChange, error }) => (
   <div className="mt-4">
     <label className="block text-sm font-medium text-zinc-600 mb-1">
@@ -55,7 +55,7 @@ const SignUpForm = () => {
   const [errors, setErrors] = useState({});
   const [popupMessage, setPopupMessage] = useState("");
   const [showPopup, setShowPopup] = useState(false);
-
+  const navigate = useNavigate();
   const handleSubmit = (e) => {
     e.preventDefault();
     const newErrors = {};
@@ -170,7 +170,12 @@ const SignUpForm = () => {
       </button>
       <div className="flex gap-2 self-start mt-4 text-sm text-green-800">
         <p className="text-zinc-500">Already have an account?</p>
-        <a href="/login" className="text-green-800 hover:text-green-600">
+        <a href="/login"
+         className="text-green-800 hover:text-green-600"
+         onClick={(e) => {
+          e.preventDefault();
+          navigate('/login');
+        }}>
           Log In
         </a>
       </div>

@@ -7,7 +7,8 @@ import { Link } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';     
 import { v4 as uuid } from "uuid";
-import {Navigate} from 'react-router-dom'
+import { useNavigate } from 'react-router-dom';
+
 
 
 const ProductCard = ({ _id, imgsrc, title, price, onDelete, quantity, onQuantityChange }) => {
@@ -112,7 +113,7 @@ const Checkout = () => {
     const [error, setError] = useState(null);
     const [products, setProducts] = useState([]);
     const { updateCartItems } = useCart();
-
+    const navigate = useNavigate();
     useEffect(() => {
         try {
             const token = localStorage.getItem('token');
@@ -250,7 +251,7 @@ const Checkout = () => {
                     products.forEach(product => {
                         handleDeleteProduct(product._id);
                       });
-                      window.location.href = `/myorder`;
+                      navigate('/login');
                     updateCartItems(0);
                     setTimeout(() => {
                       toast.success('Ordered Successfully.', {
