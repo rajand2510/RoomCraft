@@ -1,12 +1,10 @@
-# Roomcraft
-A 3D Home Decor E-commerce Website with AR Integration
 
-<img src=""https://i.ibb.co/rdh2jpn/Screenshot-2024-07-06-144706.png" alt="Roomcraft Logo - 3D Home Decor E-commerce Website" width="600" height="300">
+## 3D Home Decor E-commerce Website with AR Integration
 
-
-
+![Screenshot 2024-07-06 144706](https://github.com/rajand2510/RoomCraft/assets/100859536/177b1a8c-5a7c-4771-bd40-8ba2e953dea5)# Roomcraft
 ## Overview
 Roomcraft is an innovative e-commerce platform that allows users to explore and purchase home decor items in 3D view. With the integration of Augmented Reality (AR) technology, users can see how items would look in their own space before making a purchase.
+
 
 ## Technology Stack
 
