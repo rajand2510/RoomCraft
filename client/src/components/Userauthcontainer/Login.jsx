@@ -4,7 +4,6 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../AuthContext';
 import Navbar from '../homecontainer/Navbar';
 import Footer from '../homecontainer/Footer';
-import { Link } from 'react-router-dom';
 
 const InputField = ({ label, type = "text", value, onChange, error }) => (
   <div className="mt-4">
@@ -95,7 +94,14 @@ function LogInForm() {
       </button>
       <div className="flex gap-2 self-start mt-4 text-sm text-green-800">
         <p className="grow">Don&apos;t have an account</p>
-        <Link href="/signup" className="font-bold">Sign up</Link>
+        <a href="/login"
+         className="text-green-800 hover:text-green-600"
+         onClick={(e) => {
+          e.preventDefault();
+          navigate('/sign up');
+        }}>
+          Log In
+        </a>
       </div>
     </form>
   );
