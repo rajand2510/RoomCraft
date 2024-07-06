@@ -81,7 +81,7 @@ router.post('/signup', async (req, res) =>{
       <p>As a valued member of our community, you can now access a wide range of features and benefits designed to enhance your experience.</p>
       <p>Thank you for choosing us, and we look forward to serving you.</p>
       <p>Best regards,</p>
-      <p>DecorCraft team</p>
+      <p>Room Craft team</p>
     </div>
   </body>
 </html>
