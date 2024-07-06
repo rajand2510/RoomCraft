@@ -251,7 +251,7 @@ const Checkout = () => {
                     products.forEach(product => {
                         handleDeleteProduct(product._id);
                       });
-                      navigate('/login');
+                      navigate('/myorder');
                     updateCartItems(0);
                     setTimeout(() => {
                       toast.success('Ordered Successfully.', {

@@ -100,7 +100,7 @@ function LogInForm() {
           e.preventDefault();
           navigate('/signup');
         }}>
-          Log In
+          Sign Up
         </a>
       </div>
     </form>
