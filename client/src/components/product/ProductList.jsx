@@ -1,7 +1,5 @@
   import { useState, useEffect, useRef } from "react";
   import { useMediaQuery } from "react-responsive";
-  import { Canvas } from '@react-three/fiber';
-  import { OrbitControls } from '@react-three/drei';
   import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
   import { Link } from 'react-router-dom';
   import { jwtDecode } from "jwt-decode";
@@ -176,7 +174,7 @@ const { updateCartItems } = useCart();
               <OrbitControls ref={controlsRef} />
               {model && <primitive object={model} />}
             </Canvas> */}
-                  <img src={imgsrc} alt={title}  className="h-[282px] w-[400px]" />
+                  <img src={imgsrc} alt={title}  className="rounded-[15px]  h-[282px] w-[400px]" />
           </div>
         </Link>
        

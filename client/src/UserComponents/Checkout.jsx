@@ -7,6 +7,7 @@ import { Link } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';     
 import { v4 as uuid } from "uuid";
+import {Navigate} from 'react-router-dom'
 
 
 const ProductCard = ({ _id, imgsrc, title, price, onDelete, quantity, onQuantityChange }) => {
@@ -116,9 +117,8 @@ const Checkout = () => {
         try {
             const token = localStorage.getItem('token');
             if (!token) {
-                throw new Error('Token not found in localStorage');
-                
-            }
+                return <Navigate to="/pagenotfound" replace />
+              }
 
             const decoded = jwtDecode(token);
             const userId = decoded.id;
