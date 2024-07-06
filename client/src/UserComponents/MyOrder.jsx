@@ -47,6 +47,7 @@ const OrderSummary = ({ orderId, orderItems }) => {
 const MyComponent = () => {
   const [groupedOrders, setGroupedOrders] = useState({});
   const [user, setUser] = useState({});
+  const [loading, setLoading] = useState(true);
   const token = localStorage.getItem('token');
   if (!token) {
     return <Navigate to="/pagenotfound" replace />
@@ -114,6 +115,13 @@ const MyComponent = () => {
     }
 }, []);
 
+if (loading) {
+  return (
+    <div className="flex justify-center items-center h-screen">
+      <div className="animate-spin rounded-full h-32 w-32 border-b-4 border-gray-900"></div>
+    </div>
+  );
+}
   return (
     <>
     <Navbar />

@@ -178,8 +178,12 @@ const Checkout = () => {
     const totalprice = products.reduce((acc, current) => acc + (current.price * current.quantity), 0);
 
     if (loading) {
-        return <div>Loading...</div>;
-    }
+        return (
+          <div className="flex justify-center items-center h-screen">
+            <div className="animate-spin rounded-full h-32 w-32 border-b-4 border-gray-900"></div>
+          </div>
+        );
+      }
 
     if (error) {
         return <div>Error: {error.message}</div>;
