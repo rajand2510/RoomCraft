@@ -245,9 +245,12 @@ const Checkout = () => {
                 .then((response) => {
                   if (response.status === 200) {
                     // Payment successful, update cart and redirect to success page
+                  
+                  
                     products.forEach(product => {
                         handleDeleteProduct(product._id);
                       });
+                      window.location.href = `/myorder`;
                     updateCartItems(0);
                     setTimeout(() => {
                       toast.success('Ordered Successfully.', {
