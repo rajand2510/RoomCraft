@@ -12,6 +12,8 @@ Roomcraft is an innovative e-commerce platform that allows users to explore and 
 * **React**: For building reusable UI components and managing state changes
 * **Tailwind CSS**: For styling and layout management
 * **Spline**:For landing page
+* **Threejs**:For render 3D model
+* **React-xr**:For showcase 3d model in ar view
 ### Backend
 * **Node.js**: For building the server-side logic and API
 * **MongoDB**: For storing and managing data
