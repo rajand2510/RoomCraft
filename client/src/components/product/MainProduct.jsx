@@ -272,17 +272,21 @@ const MainProduct = () => {
   }, []);
 
   const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
-
+  useEffect(() => {
+    if (isMobile) {
+      window.scrollTo(0, 0);
+    }
+  }, [isMobile]);
   return (
     <>
       <Navbar />
       <div
-        className={`px-4 py-8 mt-[150px] mb-20 bg-white rounded-3xl shadow-xl ${
+        className={`px-4 py-8    ${isMobile ? "mt-[15px]" : "mt-[150px]"} mb-20   bg-white rounded-3xl shadow-xl ${
           isMobile ? "max-w-full" : "max-w-[898px] mx-auto"
         }`}
       >
         <div className={`flex gap-5 ${isMobile ? "flex-col" : "flex-row"}`}>
-          <div className={`flex flex-col w-full ${isMobile ? "mb-5" : "w-1/2"}`}>
+          <div className={`flex flex-col w-full ${isMobile ? "-mb-6" : "w-1/2"}`}>
             <ProductCard
               gltfPath={gltfPath}
               positionY={positionY}
