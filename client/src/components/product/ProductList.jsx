@@ -26,27 +26,10 @@
   }
 
   const ProductCard = ({ gltfPath, title, discription, price, positionY, initialScale, _id, imgsrc }) => {
-    const controlsRef = useRef();
-    const [model, setModel] = useState(null);
-    const [loadModelError, setLoadModelError] = useState(null);
+   
 const { updateCartItems } = useCart(); 
 
-    useEffect(() => {
-      const loader = new GLTFLoader();
-      loader.load(gltfPath, (gltf) => {
-        console.log('Model loaded:', gltf);
-        const scene = gltf.scene;
-        scene.scale.set(initialScale, initialScale, initialScale);
-        scene.position.y = positionY;
-        setModel(scene);
-      }, (xhr) => {
-        console.log('Model loading progress:', xhr.loaded, xhr.total);
-      }, (error) => {
-        console.error('Error loading model:', error);
-        setLoadModelError(error);
-      });
-    }, [gltfPath, initialScale, positionY]);
-    
+  
     
     
   // Assuming you have a toast library
