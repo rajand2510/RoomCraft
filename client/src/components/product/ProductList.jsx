@@ -126,7 +126,7 @@ const { updateCartItems } = useCart();
         });
       }
     } else {
-      toast.info('Login to add item to cart', {
+      toast.info('To add an item to the cart, please log in first', {
         position: "top-right",
         autoClose: 2000,
         hideProgressBar: false,
