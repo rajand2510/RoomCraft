@@ -272,10 +272,10 @@ const MainProduct = () => {
 
   const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
   useEffect(() => {
-    if (isMobile) {
+     {
       window.scrollTo(0, 0);
     }
-  }, [isMobile]);
+  });
   return (
     <>
       <Navbar />
