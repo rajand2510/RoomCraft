@@ -5,10 +5,6 @@ require('dotenv').config();
 const cors = require('cors');
 const passport = require('./auth');
 const bodyParser = require('body-parser');
-const os = require('os');
-const winston = require('winston');//os data
-const path = require('path'); //os data
-const fs = require('fs');//os data
 
 const PORT = process.env.PORT || 3000;
 
@@ -58,44 +54,6 @@ app.post('/createOrder', async (req, res) => {
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-//os data
-
-const logDirectory = path.join(__dirname, 'logs');
-if (!fs.existsSync(logDirectory)) {
-  fs.mkdirSync(logDirectory);
-}
-const logger = winston.createLogger({
-  level: 'info',
-  format: winston.format.json(),
-  transports: [
-    new winston.transports.File({ filename: path.join(logDirectory, 'system-data.log') })
-  ]
-});
-
-
-app.get('/api/system-data', (req, res) => {
-  const systemData = {
-    platform: os.platform(),
-    type: os.type(),
-    arch: os.arch(),
-    totalMemory: os.totalmem(),
-    freeMemory: os.freemem(),
-    uptime: os.uptime(),
-    hostname: os.hostname(),
-    networkInterfaces: os.networkInterfaces()
-  };
-
-  // Log system data
-  logger.info(systemData);
-
-  res.json(systemData);
-});
-
-
-
-
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
 // Import router files
