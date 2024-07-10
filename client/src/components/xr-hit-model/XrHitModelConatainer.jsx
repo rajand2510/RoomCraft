@@ -84,8 +84,6 @@
 
 // export default XrHitModelContainer;
 
-
-
 import React, { useRef, useState } from 'react';
 import { useLoader } from '@react-three/fiber';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
@@ -103,7 +101,8 @@ const Model = ({ gltfPath, position, scale }) => {
 };
 
 const XrHitModel = ({ gltfPath }) => {
-  const reticleRef = useRef();
+  const reticleRef = useRef(null);
+  const canvasRef = useRef(null);
   const [models, setModels] = useState([]);
   const [scale, setScale] = useState(new THREE.Vector3(1, 1, 1));
   const { isPresenting } = useXR();
@@ -130,24 +129,26 @@ const XrHitModel = ({ gltfPath }) => {
     setModels([{ position, id }]);
   };
 
-  const handlePinch = (e) => {
+  const handleTouchStart = (e) => {
     if (e.touches.length === 2) {
-      const touch1 = e.touches[0];
-      const touch2 = e.touches[1];
+      handlePinch.startDistance = Math.sqrt(
+        (e.touches[0].clientX - e.touches[1].clientX) ** 2 +
+        (e.touches[0].clientY - e.touches[1].clientY) ** 2
+      );
+    }
+  };
 
+  const handleTouchMove = (e) => {
+    if (e.touches.length === 2) {
       const distance = Math.sqrt(
-        (touch1.clientX - touch2.clientX) ** 2 +
-        (touch1.clientY - touch2.clientY) ** 2
+        (e.touches[0].clientX - e.touches[1].clientX) ** 2 +
+        (e.touches[0].clientY - e.touches[1].clientY) ** 2
       );
 
-      if (!handlePinch.prevDistance) {
-        handlePinch.prevDistance = distance;
-      }
+      const scaleFactor = distance / handlePinch.startDistance;
+      setScale((prevScale) => prevScale.multiplyScalar(scaleFactor));
 
-      const scaleFactor = distance / handlePinch.prevDistance;
-      setScale(prevScale => prevScale.multiplyScalar(scaleFactor));
-
-      handlePinch.prevDistance = distance;
+      handlePinch.startDistance = distance;
     }
   };
 
@@ -169,6 +170,8 @@ const XrHitModel = ({ gltfPath }) => {
       )}
 
       {!isPresenting && <Model gltfPath={gltfPath} scale={scale} />}
+
+      <canvas ref={canvasRef} onTouchStart={handleTouchStart} onTouchMove={handleTouchMove} />
     </>
   );
 };
