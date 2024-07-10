@@ -84,11 +84,11 @@
 
 // export default XrHitModelContainer;
 
-import React, { useRef, useState } from 'react';
-import { useLoader } from '@react-three/fiber';
+
+import React, { useRef, useState, useEffect } from 'react';
+import { useLoader, useThree } from '@react-three/fiber';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { OrbitControls } from "@react-three/drei";
-import { useThree } from "@react-three/fiber";
 import { Interactive, useHitTest, useXR } from "@react-three/xr";
 import { Canvas } from "@react-three/fiber";
 import { ARButton, XR } from "@react-three/xr";
@@ -101,8 +101,7 @@ const Model = ({ gltfPath, position, scale }) => {
 };
 
 const XrHitModel = ({ gltfPath }) => {
-  const reticleRef = useRef(null);
-  const canvasRef = useRef(null);
+  const reticleRef = useRef();
   const [models, setModels] = useState([]);
   const [scale, setScale] = useState(new THREE.Vector3(1, 1, 1));
   const { isPresenting } = useXR();
@@ -113,53 +112,62 @@ const XrHitModel = ({ gltfPath }) => {
     }
   });
 
-  useHitTest((hitMatrix, hit) => {
+  useHitTest((hitMatrix) => {
     hitMatrix.decompose(
       reticleRef.current.position,
       reticleRef.current.quaternion,
       reticleRef.current.scale
     );
-
     reticleRef.current.rotation.set(-Math.PI / 2, 0, 0);
   });
 
   const placeModel = (e) => {
-    let position = e.intersection.object.position.clone();
-    let id = Date.now();
+    const position = reticleRef.current.position.clone();
+    const id = Date.now();
     setModels([{ position, id }]);
-  };
-
-  const handleTouchStart = (e) => {
-    if (e.touches.length === 2) {
-      handlePinch.startDistance = Math.sqrt(
-        (e.touches[0].clientX - e.touches[1].clientX) ** 2 +
-        (e.touches[0].clientY - e.touches[1].clientY) ** 2
-      );
-    }
   };
 
   const handleTouchMove = (e) => {
     if (e.touches.length === 2) {
+      const touch1 = e.touches[0];
+      const touch2 = e.touches[1];
       const distance = Math.sqrt(
-        (e.touches[0].clientX - e.touches[1].clientX) ** 2 +
-        (e.touches[0].clientY - e.touches[1].clientY) ** 2
+        (touch1.clientX - touch2.clientX) ** 2 +
+        (touch1.clientY - touch2.clientY) ** 2
       );
 
-      const scaleFactor = distance / handlePinch.startDistance;
-      setScale((prevScale) => prevScale.multiplyScalar(scaleFactor));
+      if (!handleTouchMove.prevDistance) {
+        handleTouchMove.prevDistance = distance;
+      }
 
-      handlePinch.startDistance = distance;
+      const scaleFactor = distance / handleTouchMove.prevDistance;
+      setScale((prevScale) => prevScale.multiplyScalar(scaleFactor));
+      handleTouchMove.prevDistance = distance;
     }
   };
+
+  const handleTouchEnd = () => {
+    handleTouchMove.prevDistance = null;
+  };
+
+  useEffect(() => {
+    window.addEventListener('touchmove', handleTouchMove);
+    window.addEventListener('touchend', handleTouchEnd);
+
+    return () => {
+      window.removeEventListener('touchmove', handleTouchMove);
+      window.removeEventListener('touchend', handleTouchEnd);
+    };
+  }, []);
 
   return (
     <>
       <OrbitControls />
       <ambientLight />
       {isPresenting &&
-        models.map(({ position, id }) => {
-          return <Model key={id} gltfPath={gltfPath} position={position} scale={scale} />;
-        })}
+        models.map(({ position, id }) => (
+          <Model key={id} gltfPath={gltfPath} position={position} scale={scale} />
+        ))}
       {isPresenting && (
         <Interactive onSelect={placeModel}>
           <mesh ref={reticleRef} rotation-x={-Math.PI / 2}>
@@ -168,10 +176,7 @@ const XrHitModel = ({ gltfPath }) => {
           </mesh>
         </Interactive>
       )}
-
       {!isPresenting && <Model gltfPath={gltfPath} scale={scale} />}
-
-      <canvas ref={canvasRef} onTouchStart={handleTouchStart} onTouchMove={handleTouchMove} />
     </>
   );
 };
@@ -183,9 +188,7 @@ const XrHitModelContainer = () => {
 
   return (
     <>
-      <ARButton sessionInit={{
-        requiredFeatures: ["hit-test"]
-      }} />
+      <ARButton sessionInit={{ requiredFeatures: ["hit-test"] }} />
       <Canvas>
         <XR>
           <XrHitModel gltfPath={gltfPath} />
