@@ -1,11 +1,6 @@
 {
   "version": 2,
   
-    "rewrites": [
-      { "source": "/(*)", "destination": "/" },
-      { "source": "/(*)/$", "destination": "/$1" }
-    ]
-  ,
   "builds": [
     {
       "src": "./index.js",
