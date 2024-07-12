@@ -1,5 +1,4 @@
-import { Routes ,Navigate} from 'react-router-dom';
-import { HashRouter as Route } from 'react-router-dom';
+import { Routes ,Route,Navigate} from 'react-router-dom';
 import './App.css';
 import XrHitModelConatainer from './components/xr-hit-model/XrHitModelConatainer';
 import Home from './components/homecontainer/Home';
