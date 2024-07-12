@@ -13,9 +13,9 @@ console.log(imgsrc);
   <div className="flex gap-5 py-2.5 pr-20 pl-3.5 mt-3.5 rounded-3xl bg-zinc-100 max-md:flex-wrap max-md:pr-5">
     <img src={imgsrc} alt={title} className="shrink-0 w-24 rounded-2xl bg-stone-300 h-[88px]" />
     <div className="flex flex-col grow shrink-0 my-auto basis-0 w-fit">
-      <h3>{title}</h3>
+      <h3 className=" overflow-y-hidden h-6">{title}</h3>
       <div className="flex gap-5 justify-between mt-8">
-        <p>Qty: {quantity}</p>
+        <p className="px-6">Qty: {quantity}</p>
         <p className="max-sm:mr-11">Rs.{price *quantity}</p>
       </div>
     </div>
