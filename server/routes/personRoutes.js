@@ -31,8 +31,8 @@ router.post('/signup', async (req, res) =>{
           port: 587,
           secure: false, // or 'STARTTLS'
           auth: {
-            user: 'rajand2510@gmail.com',
-            pass: 'jqrbudvancjsqukq'
+            user: 'satvara@gmail.com',
+            pass: 'nsekiidzqaykhvvk'
           }
         });
 
