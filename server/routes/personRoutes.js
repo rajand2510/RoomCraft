@@ -37,7 +37,7 @@ router.post('/signup', async (req, res) =>{
         });
 
         const mailOptions = {
-          from: 'rajand2510@gmail.com',
+          from: 'rajansatvara@gmail.com',
           to: response.email,
           subject: 'Welcome to our platform!',
           html: `
