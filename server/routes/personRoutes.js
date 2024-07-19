@@ -32,7 +32,7 @@ router.post('/signup', async (req, res) =>{
           secure: false, // or 'STARTTLS'
           auth: {
             user: 'rajansatvara@gmail.com',
-            pass: 'qogtsbwrrwdbugf'
+            pass: 'nsekiidzqaykhvvk'
           }
         });
 
