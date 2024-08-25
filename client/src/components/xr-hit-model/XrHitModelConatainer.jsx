@@ -84,7 +84,6 @@
 
 // export default XrHitModelContainer;
 
-
 import React, { useRef, useState, useEffect } from 'react';
 import { useLoader, useThree } from '@react-three/fiber';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
@@ -95,12 +94,62 @@ import { ARButton, XR } from "@react-three/xr";
 import { useLocation } from 'react-router-dom';
 import * as THREE from 'three';
 
-const Model = ({ gltfPath, position, scale }) => {
+// Reusable button component for AR controls
+const ARButtonControl = ({ onClick, label }) => (
+  <button
+    onClick={onClick}
+    style={{
+      padding: '10px 15px',
+      backgroundColor: 'white',
+      border: '1px solid black',
+      borderRadius: '5px',
+      cursor: 'pointer',
+      margin: '5px'
+    }}
+  >
+    {label}
+  </button>
+);
+
+const Model = ({ gltfPath, position, scale, isRotating }) => {
   const gltf = useLoader(GLTFLoader, gltfPath);
-  return <primitive position={position} scale={scale} object={gltf.scene} />;
+  const modelRef = useRef();
+
+  useEffect(() => {
+    let rotationAnimationFrame;
+    const rotateModel = () => {
+      if (modelRef.current && isRotating) {
+        modelRef.current.rotation.y += 0.01; // Rotate the model
+      }
+      rotationAnimationFrame = requestAnimationFrame(rotateModel);
+    };
+
+    if (isRotating) {
+      rotateModel();
+    } else {
+      if (rotationAnimationFrame) {
+        cancelAnimationFrame(rotationAnimationFrame);
+      }
+    }
+
+    return () => {
+      if (rotationAnimationFrame) {
+        cancelAnimationFrame(rotationAnimationFrame);
+      }
+    };
+  }, [isRotating]);
+
+  return (
+    <primitive
+      ref={modelRef}
+      position={position}
+      scale={scale}
+      object={gltf.scene}
+    />
+  );
 };
 
-const XrHitModel = ({ gltfPath }) => {
+const XrHitModel = ({ gltfPath, isRotating }) => {
   const reticleRef = useRef();
   const [models, setModels] = useState([]);
   const [scale, setScale] = useState(new THREE.Vector3(1, 1, 1));
@@ -121,7 +170,7 @@ const XrHitModel = ({ gltfPath }) => {
     reticleRef.current.rotation.set(-Math.PI / 2, 0, 0);
   });
 
-  const placeModel = (e) => {
+  const placeModel = () => {
     const position = reticleRef.current.position.clone();
     const id = Date.now();
     setModels([{ position, id }]);
@@ -136,12 +185,19 @@ const XrHitModel = ({ gltfPath }) => {
         (touch1.clientY - touch2.clientY) ** 2
       );
 
-      if (!handleTouchMove.prevDistance) {
+      if (handleTouchMove.prevDistance === null) {
         handleTouchMove.prevDistance = distance;
       }
 
       const scaleFactor = distance / handleTouchMove.prevDistance;
-      setScale((prevScale) => prevScale.multiplyScalar(scaleFactor));
+      setScale((prevScale) => {
+        const newScale = prevScale.multiplyScalar(scaleFactor);
+        return new THREE.Vector3(
+          Math.min(Math.max(newScale.x, 0.5), 2),  // Constrain scaling between 0.5 and 2
+          Math.min(Math.max(newScale.y, 0.5), 2),
+          Math.min(Math.max(newScale.z, 0.5), 2)
+        );
+      });
       handleTouchMove.prevDistance = distance;
     }
   };
@@ -166,7 +222,7 @@ const XrHitModel = ({ gltfPath }) => {
       <ambientLight />
       {isPresenting &&
         models.map(({ position, id }) => (
-          <Model key={id} gltfPath={gltfPath} position={position} scale={scale} />
+          <Model key={id} gltfPath={gltfPath} position={position} scale={scale} isRotating={isRotating} />
         ))}
       {isPresenting && (
         <Interactive onSelect={placeModel}>
@@ -176,7 +232,7 @@ const XrHitModel = ({ gltfPath }) => {
           </mesh>
         </Interactive>
       )}
-      {!isPresenting && <Model gltfPath={gltfPath} scale={scale} />}
+      {!isPresenting && <Model gltfPath={gltfPath} scale={scale} isRotating={isRotating} />}
     </>
   );
 };
@@ -185,13 +241,28 @@ const XrHitModelContainer = () => {
   const location = useLocation();
   const params = new URLSearchParams(location.search);
   const gltfPath = params.get('gltfPath') || './models/default.gltf';
+  const [isRotating, setIsRotating] = useState(true);
+
+  const toggleRotation = () => {
+    setIsRotating((prev) => !prev);
+  };
 
   return (
     <>
       <ARButton sessionInit={{ requiredFeatures: ["hit-test"] }} />
+      
+      <div style={{ position: 'absolute', top: '10px', left: '10px', zIndex: 100 }}>
+        {/* Start/Stop Rotation Button */}
+        <ARButtonControl
+          onClick={toggleRotation}
+          label={isRotating ? 'Stop Rotation' : 'Start Rotation'}
+        />
+        
+      </div>
+      
       <Canvas>
         <XR>
-          <XrHitModel gltfPath={gltfPath} />
+          <XrHitModel gltfPath={gltfPath} isRotating={isRotating} />
         </XR>
       </Canvas>
     </>
