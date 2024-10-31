@@ -226,18 +226,19 @@ const ProductList = () => {
 
   return (
     <div className="mt-10" id="products">
-      <ToastContainer
-        position="top-right"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="light"
-      />
+     { toast.isOpen && 
+         <ToastContainer
+          position="top-right"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="light"
+        />}
       <div className="flex justify-center">
         <p className="text-[40px] font-bold text-green-950">Our Products</p>
       </div>
