@@ -35,7 +35,7 @@ const ProductCard = ({ gltfPath, positionY, initialScale }) => {
     const dracoLoader = new DRACOLoader();
 
     // Point to the Draco decoder files in your public directory
-    dracoLoader.setDecoderPath('https://www.gstatic.com/draco/versioned/decoders/1.5.6/');
+    dracoLoader.setDecoderPath('/draco/');
     loader.setDRACOLoader(dracoLoader);
 
     loader.load(gltfPath, (gltf) => {
