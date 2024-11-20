@@ -5,6 +5,7 @@ import { useMediaQuery } from "react-responsive";
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
+import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader';
 import { Link, useParams } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
 import { jwtDecode } from "jwt-decode";
@@ -29,7 +30,14 @@ const ProductCard = ({ gltfPath, positionY, initialScale }) => {
     }
 
     console.log('GLTF Path:', gltfPath);
+    
     const loader = new GLTFLoader();
+    const dracoLoader = new DRACOLoader();
+
+    // Point to the Draco decoder files in your public directory
+    dracoLoader.setDecoderPath('https://www.gstatic.com/draco/versioned/decoders/1.5.6/');
+    loader.setDRACOLoader(dracoLoader);
+
     loader.load(gltfPath, (gltf) => {
       console.log('Model loaded:', gltf);
       const scene = gltf.scene;
@@ -42,8 +50,12 @@ const ProductCard = ({ gltfPath, positionY, initialScale }) => {
       console.error('Error loading model:', error);
       setLoadModelError(error);
     });
-  }, [gltfPath, initialScale, positionY]);
 
+    // Clean up the DRACOLoader after use
+    return () => {
+      dracoLoader.dispose();
+    };
+  }, [gltfPath, initialScale, positionY]);
   if (loadModelError) {
     return <div>Error loading model: {loadModelError.message}</div>;
   }
