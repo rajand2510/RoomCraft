@@ -1,5 +1,5 @@
 // src/homecontainer/Navbar.js
-import  { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import { useAuth } from '../../AuthContext';
@@ -9,9 +9,9 @@ import { useCart } from '../../CartContext';  // Import the cart context
 
 const NavItem = ({ to, children }) => {
   return (
-    <a href={to} className="cursor-pointer">
+    <Link to={to} className="cursor-pointer">
       {children}
-    </a>
+    </Link>
   );
 };
 
@@ -32,7 +32,7 @@ const Navbar = () => {
 
   const navItems = [
     { text: 'Home', path: '/' },
-    { text: 'Products', path: '/#productlist' },
+    { text: 'About Us', path: '/about' },
   ];
 
   const toggleMenu = () => {
@@ -66,43 +66,6 @@ const Navbar = () => {
       }
     }
   }, [updateCartItems]);
-    // Handle navigation and scrolling behavior for About Us section
-    useEffect(() => {
-      const handleHashChange = () => {
-        const hash = window.location.hash;
-        if (hash) {
-            const targetElement = document.getElementById(hash.slice(1));
-            if (targetElement) {
-                const headerOffset = document.querySelector('header')?.offsetHeight || 100; // Dynamically adjust
-                const elementPosition = targetElement.getBoundingClientRect().top;
-                const offsetPosition = elementPosition + window.scrollY - headerOffset;
-    
-                console.log("Hash:", hash);
-                console.log("Target Element:", targetElement);
-                console.log("Element Position:", elementPosition);
-                console.log("Offset Position:", offsetPosition);
-                console.log("ScrollY:", window.scrollY);
-    
-                window.scrollTo({
-                    top: offsetPosition,
-                    behavior: 'smooth',
-                });
-            }
-        }
-    };
-    
-  
-      // Call function on initial load and whenever the hash changes
-      handleHashChange();
-  
-      // Add an event listener for hash change
-      window.addEventListener('hashchange', handleHashChange);
-  
-      // Cleanup event listener
-      return () => {
-          window.removeEventListener('hashchange', handleHashChange);
-      };
-  }, []);
 
   return (
     <header className="fixed top-0 z-50 w-full bg-green-950 text-white px-16 text-lg">
@@ -142,8 +105,7 @@ const Navbar = () => {
               {isLoggedIn ? (
                 <div className="flex gap-6 items-center">
                   <div className="relative">
-                    <NavItem >
-                    <Link to="/Checkout">
+                    <NavItem to="/Checkout">
                       <img
                         src="https://cdn.builder.io/api/v1/image/assets/TEMP/46a7ade1f639c80316c5fc49416c181e2db3522c89bd63a467f1817d6904d0de?apiKey=980db322e33a4a39a5052caa449e1da6&"
                         alt=""
@@ -151,7 +113,6 @@ const Navbar = () => {
                       <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
                         {cartItems}
                       </span>
-                      </Link>
                     </NavItem>
                   </div>
                   <div className="relative">
@@ -175,15 +136,11 @@ const Navbar = () => {
                 </div>
               ) : (
                 <div className="flex flex-col gap-6 font-semibold mt-4 md:hidden">
-                  <NavItem >
-                  <Link to="/login">
+                  <NavItem to="/login">
                     <Button className="px-5">Log in</Button>
-                    </Link>
                   </NavItem>
-                  <NavItem >
-                  <Link to="/signup">
+                  <NavItem to="/signup">
                     <Button>Sign up</Button>
-                    </Link>
                   </NavItem>
                 </div>
               )}

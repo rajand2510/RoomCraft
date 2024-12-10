@@ -12,7 +12,7 @@ import { jwtDecode } from "jwt-decode";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useCart } from '../../CartContext'; 
-import { useNavigate } from 'react-router-dom';
+
 
 
 
@@ -243,10 +243,6 @@ const ProductDetails = ({ title, discription, price, gltfPath }) => {
 
 const MainProduct = () => {
   const location = useLocation();
-  const navigate = useNavigate();
-  const handleBack = () => {
-    navigate(-1); // This will take the user back to the previous page in history
-  };
   const params = new URLSearchParams(location.search);
 
   const gltfPath = params.get('gltfPath');
@@ -255,7 +251,7 @@ const MainProduct = () => {
   const price = params.get('price');
   const positionY = params.get('positionY');
   const initialScale = params.get('initialScale');
-
+  const imgsrc = params.get('imgsrc');
 
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
