@@ -4,6 +4,7 @@ import Hero from './Hero';
 import Navbar from './Navbar';
 import ProductList from '../product/ProductList';
 import FAQ from './FAQ';
+import About from './About';
 // import AboutUs from './AboutUs';
 
 const Home = () => {
@@ -36,6 +37,7 @@ const Home = () => {
             <section id="productlist">
                 <ProductList />
             </section>
+            {/* <About/> */}
             <FAQ />
             <Footer />
         </>

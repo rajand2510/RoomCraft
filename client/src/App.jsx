@@ -8,6 +8,7 @@ import RazorpayPayment from './UserComponents/Checkout';
 import MainProduct from './components/product/MainProduct';
 import MyOrder from './UserComponents/MyOrder';
 import ToasterComponent from './PageNotFound/ToasterComponent';
+import About from './components/homecontainer/About';
 function App() {
   
   return (
@@ -21,6 +22,7 @@ function App() {
 <Route path="/myorder" element={<MyOrder/>} />
 <Route path="/not-found" element={<ToasterComponent/>} />
 <Route path="*" element={<Navigate to="/not-found" replace />}/>
+<Route path='/about'element={<About/>}/>
 </Routes>
   )
 }
