@@ -1,5 +1,5 @@
 // src/homecontainer/Navbar.js
-import React, { useState, useEffect } from 'react';
+import  { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import { useAuth } from '../../AuthContext';
@@ -142,7 +142,8 @@ const Navbar = () => {
               {isLoggedIn ? (
                 <div className="flex gap-6 items-center">
                   <div className="relative">
-                    <NavItem to="/Checkout">
+                    <NavItem >
+                    <Link to="/Checkout">
                       <img
                         src="https://cdn.builder.io/api/v1/image/assets/TEMP/46a7ade1f639c80316c5fc49416c181e2db3522c89bd63a467f1817d6904d0de?apiKey=980db322e33a4a39a5052caa449e1da6&"
                         alt=""
@@ -150,6 +151,7 @@ const Navbar = () => {
                       <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
                         {cartItems}
                       </span>
+                      </Link>
                     </NavItem>
                   </div>
                   <div className="relative">
@@ -173,11 +175,15 @@ const Navbar = () => {
                 </div>
               ) : (
                 <div className="flex flex-col gap-6 font-semibold mt-4 md:hidden">
-                  <NavItem to="/login">
+                  <NavItem >
+                  <Link to="/login">
                     <Button className="px-5">Log in</Button>
+                    </Link>
                   </NavItem>
-                  <NavItem to="/signup">
+                  <NavItem >
+                  <Link to="/signup">
                     <Button>Sign up</Button>
+                    </Link>
                   </NavItem>
                 </div>
               )}
