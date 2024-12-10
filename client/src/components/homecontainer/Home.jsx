@@ -33,9 +33,9 @@ const Home = () => {
         <>
             <Navbar />
             <Hero />
-            {/* <section id="productlist"> */}
+            <section id="productlist">
                 <ProductList />
-            {/* </section> */}
+            </section>
             <FAQ />
             <Footer />
         </>
