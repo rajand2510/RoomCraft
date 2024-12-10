@@ -1,6 +1,6 @@
 // src/homecontainer/Navbar.js
-import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import  { useState, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';  // Use `Link` from react-router-dom
 import { ToastContainer } from 'react-toastify';
 import { useAuth } from '../../AuthContext';
 import axios from 'axios';
@@ -9,9 +9,9 @@ import { useCart } from '../../CartContext';  // Import the cart context
 
 const NavItem = ({ to, children }) => {
   return (
-    <Link to={to} className="cursor-pointer">
-      {children}
-    </Link>
+    <a href={to} className="cursor-pointer">
+    {children}
+  </a>
   );
 };
 
@@ -29,10 +29,12 @@ const Navbar = () => {
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const { cartItems, updateCartItems } = useCart();  // Consume the cart context
   const { isLoggedIn, handleLogout } = useAuth();
+ // Hook for navigation
 
   const navItems = [
     { text: 'Home', path: '/' },
-    { text: 'About Us', path: '/about' },
+    { text: 'Products', path: '/#productlist' },
+    { text: 'About Us', path: '/about' },  // Use absolute path to trigger correct behavior
   ];
 
   const toggleMenu = () => {
@@ -43,6 +45,7 @@ const Navbar = () => {
     setIsProfileOpen(!isProfileOpen);
   };
   
+  // Handle cart and user authentication status
   useEffect(() => {
     const tokenhandle = localStorage.getItem('token');
 
@@ -67,13 +70,52 @@ const Navbar = () => {
     }
   }, [updateCartItems]);
 
+  // Handle navigation and scrolling behavior for About Us section
+  useEffect(() => {
+    const handleHashChange = () => {
+      const hash = window.location.hash;
+      if (hash) {
+          const targetElement = document.getElementById(hash.slice(1));
+          if (targetElement) {
+              const headerOffset = document.querySelector('header')?.offsetHeight || 100; // Dynamically adjust
+              const elementPosition = targetElement.getBoundingClientRect().top;
+              const offsetPosition = elementPosition + window.scrollY - headerOffset;
+  
+              console.log("Hash:", hash);
+              console.log("Target Element:", targetElement);
+              console.log("Element Position:", elementPosition);
+              console.log("Offset Position:", offsetPosition);
+              console.log("ScrollY:", window.scrollY);
+  
+              window.scrollTo({
+                  top: offsetPosition,
+                  behavior: 'smooth',
+              });
+          }
+      }
+  };
+  
+
+    // Call function on initial load and whenever the hash changes
+    handleHashChange();
+
+    // Add an event listener for hash change
+    window.addEventListener('hashchange', handleHashChange);
+
+    // Cleanup event listener
+    return () => {
+        window.removeEventListener('hashchange', handleHashChange);
+    };
+}, []);
+
+ 
   return (
     <header className="fixed top-0 z-50 w-full bg-green-950 text-white px-16 text-lg">
       <div className="flex gap-5 justify-between w-full max-w-[1473px] max-md:flex-wrap max-md:max-w-full">
         <img
           loading="lazy"
           src="/image/logo.png"
-          alt=""
+          alt="Logo"
           className={`shrink-0 max-w-full aspect-[2.5] w-[200px] max-md:w-[150px] ${isMenuOpen ? 'hidden' : ''}`}
         />
         <nav className="flex gap-5 justify-between my-auto max-md:flex-wrap max-md:max-w-full">
@@ -108,7 +150,7 @@ const Navbar = () => {
                     <NavItem to="/Checkout">
                       <img
                         src="https://cdn.builder.io/api/v1/image/assets/TEMP/46a7ade1f639c80316c5fc49416c181e2db3522c89bd63a467f1817d6904d0de?apiKey=980db322e33a4a39a5052caa449e1da6&"
-                        alt=""
+                        alt="Cart"
                       />
                       <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
                         {cartItems}
@@ -120,13 +162,15 @@ const Navbar = () => {
                       <img
                         loading="lazy"
                         src="https://cdn.builder.io/api/v1/image/assets/TEMP/9fceddc3e284bb92e89a4d15b266974f64f5a881dd56651bce80574f6c4ddbb3?apiKey=980db322e33a4a39a5052caa449e1da6&"
-                        alt=""
+                        alt="Profile"
                         className="w-full aspect-square max-w-[39px]"
                       />
                     </div>
                     {isProfileOpen && (
                       <div className="absolute right-0 mt-2 w-48 bg-white text-black rounded-lg shadow-lg py-2">
-                      <Link to="/myorder"> <Button className="w-full text-left px-4 py-2">My Order</Button></Link> 
+                        <Link to="/myorder">
+                          <Button className="w-full text-left px-4 py-2">My Order</Button>
+                        </Link>
                         <Button className="w-full text-left px-4 py-2" onClick={handleLogout}>
                           Log out
                         </Button>

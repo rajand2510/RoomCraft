@@ -83,34 +83,28 @@ const SignUpForm = () => {
       fetch('https://room-craft-api.vercel.app/api/person/signup', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
+            'Content-Type': 'application/json',
         },
         body: JSON.stringify(formData),
-      })
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        return response.json();
-      })
-      .then(data => {
-        // Assuming data is of the format { response: { ... }, token: "..." }
-        if (data.token) {
-          // Handle successful signup
-          setPopupMessage("Sign up successful!");
-          // Optionally, you can store the token in localStorage or sessionStorage for future API requests
-          localStorage.setItem('token', data.token);
-        } else {
-          // Handle unexpected response format
-          setPopupMessage("Sign up failed: Unexpected response format");
-        }
-        setShowPopup(true);
-      })
-      .catch(error => {
-        setPopupMessage("Sign up error: " + error.message);
-        setShowPopup(true);
-      });
-      
+    })
+        .then(response => {
+            if (!response.ok) {
+                return response.json().then(err => { throw new Error(err.error); });
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.token) {
+                setPopupMessage("Sign up successful!");
+                localStorage.setItem('token', data.token);
+            }
+            setShowPopup(true);
+        })
+        .catch(error => {
+            setPopupMessage(error.message); // Display the error message from backend
+            setShowPopup(true);
+        });
+    
     }
   };
   

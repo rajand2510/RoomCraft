@@ -9,7 +9,14 @@ const nodemailer = require('nodemailer');
 router.post('/signup', async (req, res) =>{
     try{
         const data = req.body // Assuming the request body contains the person data
+      // Extract email from the request body
+console.log(data);
 
+        // Check if the email already exists in the database
+        const existingPerson = await Person.findOne({ email });
+        if (existingPerson) {
+            return res.status(400).json({ error: 'Email is already registered' });
+        }
         // Create a new Person document using the Mongoose model
         const newPerson = new Person(data);
 
