@@ -9,9 +9,9 @@ import { useCart } from '../../CartContext';  // Import the cart context
 
 const NavItem = ({ to, children }) => {
   return (
-    <Link to={to} className="cursor-pointer">
+    <a to={to} className="cursor-pointer">
       {children}
-    </Link>
+    </a>
   );
 };
 
@@ -32,7 +32,7 @@ const Navbar = () => {
 
   const navItems = [
     { text: 'Home', path: '/' },
-    { text: 'About Us', path: '/about' },
+    { text: 'Products', path: '/#productlist' },
   ];
 
   const toggleMenu = () => {
