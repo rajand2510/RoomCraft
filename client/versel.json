@@ -1,8 +1,5 @@
 {
-  "rewrites": [
-    { "source": "/(.*)", "destination": "/" }
-  ],
-  "redirects": [
-    { "source": "/products", "destination": "/", "statusCode": 200 }
-  ]
-}
+    "rewrites": [
+      { "source": "/(.*)", "destination": "/" }
+    ]
+  }
