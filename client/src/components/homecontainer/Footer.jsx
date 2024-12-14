@@ -5,7 +5,7 @@ const Footer = () => {
   const isMobile = useMediaQuery({ query: "(max-width: 400px)" });
 
   return (
-    <footer className="bg-green-950 py-[70px] text-center p-4">
+    <footer className="bg-[#0A3622] py-[70px] text-center p-4">
       {isMobile ? (
         <div className="mobile">
        

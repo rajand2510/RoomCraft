@@ -14,7 +14,7 @@ const Hero = () =>{
 
           (
             <a href="#products">
-          <button className='flex justify-center items-center text-[10px] px-5 py-2  hover:shadow-inner text-white rounded-2xl my-[730px]  mx-[136px] absolute  z-1  bg-green-800 bg-opacity-100 border border-white border-opacity-70 hover:bg-green-700 cursor-pointer max-md:px-5'>
+          <button className='flex justify-center items-center text-[10px] px-5 py-2  hover:shadow-inner text-white rounded-2xl my-[730px]  mx-[136px] absolute  z-1 bg-[#0A3622] bg-opacity-100 border border-white border-opacity-70 hover:bg-green-700 cursor-pointer max-md:px-5'>
             Explore Products
           </button>
           </a>) : (

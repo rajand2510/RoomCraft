@@ -68,7 +68,7 @@ const Navbar = () => {
   }, [updateCartItems]);
 
   return (
-    <header className="fixed top-0 z-50 w-full bg-green-950 text-white px-16 text-lg">
+    <header className="fixed top-0 z-50 w-full bg-[#0A3622] text-white px-16 text-lg">
       <div className="flex gap-5 justify-between w-full max-w-[1473px] max-md:flex-wrap max-md:max-w-full">
         <img
           loading="lazy"
