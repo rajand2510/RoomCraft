@@ -82,7 +82,7 @@ const ProductCard = ({ gltfPath, positionY, initialScale }) => {
           gl={{ alpha: true }}
           style={{ background: 'linear-gradient(to bottom, #cfd9df, #e2ebf0)' }}
         >
-          <ambientLight intensity={0.5} color="#ffffff" />
+          <ambientLight intensity={2} color="#ffffff" />
           <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} />
           <OrbitControls ref={controlsRef} />
           {model && <primitive object={model} />}
