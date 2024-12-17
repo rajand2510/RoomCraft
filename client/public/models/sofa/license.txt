@@ -1,11 +1,11 @@
 Model Information:
-* title:	Sofa
-* source:	https://sketchfab.com/3d-models/sofa-3af6878f0b1f4ecb99936965c0d1a3e8
-* author:	mervemacit (https://sketchfab.com/mervemacit)
+* title:	Volden armchair sofa
+* source:	https://sketchfab.com/3d-models/volden-armchair-sofa-29ecfe7f64024be6b88a0f8bb9bc60b7
+* author:	S U S H I L   N (https://sketchfab.com/Sushilsallu)
 
 Model License:
 * license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
 * requirements:	Author must be credited. Commercial use is allowed.
 
 If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
-This work is based on "Sofa" (https://sketchfab.com/3d-models/sofa-3af6878f0b1f4ecb99936965c0d1a3e8) by mervemacit (https://sketchfab.com/mervemacit) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+This work is based on "Volden armchair sofa" (https://sketchfab.com/3d-models/volden-armchair-sofa-29ecfe7f64024be6b88a0f8bb9bc60b7) by S U S H I L   N (https://sketchfab.com/Sushilsallu) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
