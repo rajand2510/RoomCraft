@@ -2,10 +2,10 @@ import { useState, useEffect, useRef } from "react";
 import Footer from "../homecontainer/Footer";
 import Navbar from "../homecontainer/Navbar";
 import { useMediaQuery } from "react-responsive";
-import { Canvas } from '@react-three/fiber';
-import { OrbitControls } from '@react-three/drei';
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
-import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader';
+// import { Canvas } from '@react-three/fiber';
+// import { OrbitControls } from '@react-three/drei';
+// import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
+// import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader';
 import { Link, useParams } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
 import { jwtDecode } from "jwt-decode";
@@ -13,84 +13,84 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useCart } from '../../CartContext'; 
 import { useNavigate } from 'react-router-dom';
+import '@google/model-viewer';
 
 
 
+// const ProductCard = ({ gltfPath, positionY, initialScale }) => {
+//   const controlsRef = useRef();
+//   const [model, setModel] = useState(null);
+//   const [loadModelError, setLoadModelError] = useState(null);
 
-const ProductCard = ({ gltfPath, positionY, initialScale }) => {
-  const controlsRef = useRef();
-  const [model, setModel] = useState(null);
-  const [loadModelError, setLoadModelError] = useState(null);
+//   useEffect(() => {
+//     if (!gltfPath) {
+//       console.error('No GLTF path provided');
+//       setLoadModelError(new Error('No GLTF path provided'));
+//       return;
+//     }
 
-  useEffect(() => {
-    if (!gltfPath) {
-      console.error('No GLTF path provided');
-      setLoadModelError(new Error('No GLTF path provided'));
-      return;
-    }
-
-    console.log('GLTF Path:', gltfPath);
+//     console.log('GLTF Path:', gltfPath);
     
-    const loader = new GLTFLoader();
-    const dracoLoader = new DRACOLoader();
+//     const loader = new GLTFLoader();
+//     const dracoLoader = new DRACOLoader();
 
-    // Point to the Draco decoder files in your public directory
-    dracoLoader.setDecoderPath('/draco/');
-    loader.setDRACOLoader(dracoLoader);
+//     // Point to the Draco decoder files in your public directory
+//     dracoLoader.setDecoderPath('/draco/');
+//     loader.setDRACOLoader(dracoLoader);
 
-    loader.load(gltfPath, (gltf) => {
-      console.log('Model loaded:', gltf);
-      const scene = gltf.scene;
-      scene.scale.set(initialScale, initialScale, initialScale);
-      scene.position.y = positionY;
-      setModel(scene);
-    }, (xhr) => {
-      console.log('Model loading progress:', xhr.loaded, xhr.total);
-    }, (error) => {
-      console.error('Error loading model:', error);
-      setLoadModelError(error);
-    });
+//     loader.load(gltfPath, (gltf) => {
+//       console.log('Model loaded:', gltf);
+//       const scene = gltf.scene;
+//       scene.scale.set(initialScale, initialScale, initialScale);
+//       scene.position.y = positionY;
+//       setModel(scene);
+//     }, (xhr) => {
+//       console.log('Model loading progress:', xhr.loaded, xhr.total);
+//     }, (error) => {
+//       console.error('Error loading model:', error);
+//       setLoadModelError(error);
+//     });
 
-    // Clean up the DRACOLoader after use
-    return () => {
-      dracoLoader.dispose();
-    };
-  }, [gltfPath, initialScale, positionY]);
-  if (loadModelError) {
-    return <div>Error loading model: {loadModelError.message}</div>;
-  }
+//     // Clean up the DRACOLoader after use
+//     return () => {
+//       dracoLoader.dispose();
+//     };
+//   }, [gltfPath, initialScale, positionY]);
+//   if (loadModelError) {
+//     return <div>Error loading model: {loadModelError.message}</div>;
+//   }
 
-  return (
-    <div className="flex flex-col mx-[15px] my-[20px] bg-white shadow-lg max-w-[380px] max-h-[480px] rounded-[25px]">
-        { toast.isOpen && 
-         <ToastContainer
-          position="top-right"
-          autoClose={5000}
-          hideProgressBar={false}
-          newestOnTop={false}
-          closeOnClick
-          rtl={false}
-          pauseOnFocusLoss
-          draggable
-          pauseOnHover
-          theme="light"
-        />}
-      <div className="shrink-0 rounded-[20px] bg-zinc-300 h-[320px]">
-        <Canvas
-          className="product-canvas rounded-[15px]"
-          camera={{ position: [0, 0, 5] }}
-          gl={{ alpha: true }}
-          style={{ background: 'linear-gradient(to bottom, #cfd9df, #e2ebf0)' }}
-        >
-          <ambientLight intensity={3} color="#ffffff" />
-          <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} />
-          <OrbitControls ref={controlsRef} />
-          {model && <primitive object={model} />}
-        </Canvas>
-      </div>
-    </div>
-  );
-};
+//   return (
+//     <div className="flex flex-col mx-[15px] my-[20px] bg-white shadow-lg max-w-[380px] max-h-[480px] rounded-[25px]">
+//         { toast.isOpen && 
+//          <ToastContainer
+//           position="top-right"
+//           autoClose={5000}
+//           hideProgressBar={false}
+//           newestOnTop={false}
+//           closeOnClick
+//           rtl={false}
+//           pauseOnFocusLoss
+//           draggable
+//           pauseOnHover
+//           theme="light"
+//         />}
+//       <div className="shrink-0 rounded-[20px] bg-zinc-300 h-[320px]">
+//         <Canvas
+//           className="product-canvas rounded-[15px]"
+//           camera={{ position: [0, 0, 5] }}
+//           gl={{ alpha: true }}
+//           style={{ background: 'linear-gradient(to bottom, #cfd9df, #e2ebf0)' }}
+//         >
+//           <ambientLight intensity={3} color="#ffffff" />
+//           <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} />
+//           <OrbitControls ref={controlsRef} />
+//           {model && <primitive object={model} />}
+//         </Canvas>
+//       </div>
+//     </div>
+//   );
+// };
 
 const AddToCartButton = () => {
   const { updateCartItems } = useCart(); 
@@ -296,17 +296,22 @@ const MainProduct = () => {
     <>
       <Navbar />
       <div
-        className={`px-4 py-8    ${isMobile ? "mt-[15px]" : "mt-[150px]"} mb-20   bg-white rounded-3xl shadow-xl ${
+        className={`px-4 py-8    ${isMobile ? "mt-[15px]" : "mt-[150px]"} mb-20   bg-white rounded-3xl shadow-xl drop-shadow-2xl ${
           isMobile ? "max-w-full" : "max-w-[898px] mx-auto"
         }`}
       >
         <div className={`flex gap-5 ${isMobile ? "flex-col" : "flex-row"}`}>
           <div className={`flex flex-col w-full ${isMobile ? "-mb-6" : "w-1/2"}`}>
-            <ProductCard
-              gltfPath={gltfPath}
-              positionY={positionY}
-              initialScale={initialScale}
-            />
+          <div className='rounded-lg' style={{ width: '480px', height: '380px' }}>
+    <model-viewer
+      src={gltfPath}
+      alt="Home Decor Product"
+      auto-rotate
+      camera-controls
+      shadow-intensity="1"
+      style={{ width: '100%', height: '100%' }}
+    ></model-viewer>
+  </div>
           </div>
           <div className={`flex flex-col w-full ${isMobile ? "" : "w-1/2"}`}>
             <ProductDetails
