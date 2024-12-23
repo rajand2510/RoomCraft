@@ -1,12 +1,12 @@
 import  { useState, useEffect } from 'react';
 import Footer from './Footer';
-import Hero from './Hero';
+// import Hero from './Hero';
 import Navbar from './Navbar';
 import ProductList from '../product/ProductList';
 import FAQ from './FAQ';
-import About from './About';
+// import About from './About';
 // import AboutUs from './AboutUs';
-
+import Landing from './Landing';
 const Home = () => {
     const [loading, setLoading] = useState(true);
 
@@ -32,14 +32,17 @@ const Home = () => {
 
     return (
         <>
-            <Navbar />
-            <Hero />
+        <div className='bg-gradient-to-b from-slate-50 to-slate-100 '>    
+                    <Navbar />
+            <Landing/>
             <section id="productlist">
                 <ProductList />
             </section>
             {/* <About/> */}
             <FAQ />
             <Footer />
+            </div>
+
         </>
     );
 };

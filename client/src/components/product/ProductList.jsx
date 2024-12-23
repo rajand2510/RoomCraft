@@ -106,7 +106,7 @@ const ProductCard = ({ gltfPath, title, discription, price, positionY, initialSc
   };
 
   return (
-    <div className="flex flex-col px-5 pt-5 pb-5 mx-[15px] my-[20px] bg-white shadow-2xl max-w-[380px] max-h-[480px] rounded-[25px]">
+    <div className="flex flex-col px-5 pt-5 pb-5 mx-[15px] my-[20px] bg-gray-50 shadow-2xl max-w-[380px] max-h-[480px] rounded-[25px]">
       <Link
       to={`/products?gltfPath=${gltfPath}&title=${title}&discription=${discription}&price=${price}&positionY=${positionY}&initialScale=${initialScale}&imgsrc=${imgsrc}&_id=${_id}`}>
         <div className="shrink-0 rounded-[20px] bg-zinc-300 h-[282px]">
@@ -226,7 +226,7 @@ const ProductList = () => {
   }
 
   return (
-    <div className="mt-10" id="products">
+    <div className="mt-10 bg-gradient-to-b from-slate-50 to-slate-100 " id="products">
      { toast.isOpen && 
          <ToastContainer
           position="top-right"
