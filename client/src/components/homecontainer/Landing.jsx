@@ -24,28 +24,45 @@ const Landing = () => {
 
   return (
     <div className="flex flex-col items-center mt-16 justify-center bg-[#0A3622] min-h-screen">
-      
-     
       {/* Content Container */}
-      <div className="flex flex-col items-center  justify-center w-full gap-12 text-center">
+      <div className="flex flex-col items-center justify-center w-full gap-12 text-center">
         {/* Left Content */}
-        <div className="flex  flex-col items-center relative mb-[460px] justify-center w-full lg:w-1/2 space-y-6">
-          <h1 className="text-6xl lg:text-[80px] font-bold text-green-200/40 leading-tight">
+        <div
+          className={`flex flex-col items-center relative mb-[460px] justify-center w-full ${
+            isMobile ? 'space-y-4' : 'lg:w-1/2 space-y-6'
+          }`}
+        >
+          <h1
+            className={`text-4xl lg:text-[80px] font-bold text-green-200/40 leading-tight ${
+              isMobile ? 'text-5xl' : 'text-6xl'
+            }`}
+          >
             Explore Your Space
           </h1>
-          <div className='z-20'>    
-                  <div className="text-[30px] align-middle  font-bold text-gray-200/50 z-20 pointer-events-none select-none">
-             Visualize Homedecor with
-          </div>
-          <div className="text-[30px] align-middle  font-bold text-gray-200/50 z-20 pointer-events-none select-none">
+          <div className="z-20">
+            <div
+              className={`text-[24px] align-middle font-bold text-gray-200/50 z-20 pointer-events-none select-none ${
+                isMobile ? 'text-[20px]' : 'text-[30px]'
+              }`}
+            >
+              Visualize Homedecor with
+            </div>
+            <div
+              className={`text-[24px] align-middle font-bold text-gray-200/50 z-20 pointer-events-none select-none ${
+                isMobile ? 'text-[20px]' : 'text-[30px]'
+              }`}
+            >
               AR on RoomCraft
+            </div>
           </div>
-          </div>
-
         </div>
 
         {/* Right Content: Model Viewer */}
-        <div className="flex absolute mt-24 justify-center items-center">
+        <div
+          className={`flex absolute mt-24 justify-center items-center ${
+            isMobile ? 'w-full' : ''
+          }`}
+        >
           <model-viewer
             ref={modelViewerRef}
             src="/models/moby_2_seater_sofa.glb"
@@ -54,22 +71,27 @@ const Landing = () => {
             environment-image="neutral"
             shadow-intensity="1"
             exposure="1"
-            style={{ width: "700px", height: "700px" }}
+            style={{
+              width: isMobile ? '100%' : '700px',
+              height: isMobile ? '400px' : '700px',
+            }} // Adjust size for mobile
             onMouseEnter={handleHover}
             onMouseLeave={handleHoverOut}
           />
         </div>
-        
       </div>
 
-      {/* Overlay Text */}
-      <div className="absolute top-[350px] right-0 text-[180px] align-middle mr-[105px] font-bold text-gray-200/50 pointer-events-none select-none">
+      {/* Overlay Text: REALITY CRAFT */}
+      <div
+        className={`absolute ${
+          isMobile
+            ? 'bottom-4 left-1/2 transform -translate-x-1/2 text-[90px]'
+            : 'top-[350px] right-0 text-[180px] mr-[105px]'
+        } font-bold text-gray-200/50 pointer-events-none select-none`}
+      >
         REALITY CRAFT
       </div>
- 
-
     </div>
-    
   );
 };
 
