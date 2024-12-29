@@ -28,29 +28,25 @@ const Landing = () => {
       <div className="flex flex-col items-center justify-center w-full gap-12 text-center">
         {/* Left Content */}
         <div
-          className={`flex flex-col items-center relative mb-[460px] justify-center w-full ${
-            isMobile ? 'space-y-4' : 'lg:w-1/2 space-y-6'
-          }`}
+          className={`flex flex-col items-center relative mb-[460px] justify-center w-full ${isMobile ? 'space-y-4' : 'lg:w-1/2 space-y-6'
+            }`}
         >
           <h1
-            className={`text-4xl lg:text-[80px] font-bold text-green-200/40 leading-tight ${
-              isMobile ? 'text-5xl' : 'text-6xl'
-            }`}
+            className={`text-4xl lg:text-[80px] font-bold text-green-200/40 leading-tight ${isMobile ? 'text-5xl' : 'text-6xl'
+              }`}
           >
             Explore Your Space
           </h1>
           <div className="z-20">
             <div
-              className={`text-[24px] align-middle font-bold text-gray-200/50 z-20 pointer-events-none select-none ${
-                isMobile ? 'text-[20px]' : 'text-[30px]'
-              }`}
+              className={`text-[24px] align-middle font-bold text-gray-200/50 z-20 pointer-events-none select-none ${isMobile ? 'text-[20px]' : 'text-[30px]'
+                }`}
             >
               Visualize Homedecor with
             </div>
             <div
-              className={`text-[24px] align-middle font-bold text-gray-200/50 z-20 pointer-events-none select-none ${
-                isMobile ? 'text-[20px]' : 'text-[30px]'
-              }`}
+              className={`text-[24px] align-middle font-bold text-gray-200/50 z-20 pointer-events-none select-none ${isMobile ? 'text-[20px]' : 'text-[30px]'
+                }`}
             >
               AR on RoomCraft
             </div>
@@ -59,15 +55,16 @@ const Landing = () => {
 
         {/* Right Content: Model Viewer */}
         <div
-          className={`flex absolute mt-24 justify-center items-center ${
-            isMobile ? 'w-full' : ''
-          }`}
+          className={`flex absolute mt-24 justify-center items-center ${isMobile ? 'w-full' : ''
+            }`}
         >
           <model-viewer
             ref={modelViewerRef}
             src="/models/moby_2_seater_sofa.glb"
             alt="A 3D model of an emerald armchair"
-            camera-controls
+            disable-camera-controls
+            disable-rotate
+            disable-zoom
             environment-image="neutral"
             shadow-intensity="1"
             exposure="1"
@@ -78,16 +75,16 @@ const Landing = () => {
             onMouseEnter={handleHover}
             onMouseLeave={handleHoverOut}
           />
+
         </div>
       </div>
 
       {/* Overlay Text: REALITY CRAFT */}
       <div
-        className={`absolute ${
-          isMobile
+        className={`absolute ${isMobile
             ? 'bottom-4 left-1/2 transform -translate-x-1/2 text-[90px]'
             : 'top-[350px] right-0 text-[180px] mr-[105px]'
-        } font-bold text-gray-200/50 pointer-events-none select-none`}
+          } font-bold text-gray-200/50 pointer-events-none select-none`}
       >
         REALITY CRAFT
       </div>
