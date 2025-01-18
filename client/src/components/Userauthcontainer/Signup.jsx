@@ -2,8 +2,18 @@
 import SignUpForm from "./SignUpForm";
 import Navbar from "../homecontainer/Navbar";
 import Footer from "../homecontainer/Footer";
-
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../AuthContext';
+import { useEffect } from "react";
 const Signup = () => {
+  const { isLoggedIn } = useAuth();
+    const navigate = useNavigate();
+  
+    useEffect(() => {
+      if (isLoggedIn) {
+        navigate('/'); // Redirect to homepage or another page
+      }
+    }, [isLoggedIn, navigate]);
   return (
     <>
     <Navbar />

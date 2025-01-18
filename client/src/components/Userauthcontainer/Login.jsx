@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import  {useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../AuthContext';
 import Navbar from '../homecontainer/Navbar';
 import Footer from '../homecontainer/Footer';
+
 
 const InputField = ({ label, type = "text", value, onChange, error }) => (
   <div className="mt-4">
@@ -108,6 +109,14 @@ function LogInForm() {
 }
 
 const Login = () => {
+  const { isLoggedIn } = useAuth();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      navigate('/'); // Redirect to homepage or another page
+    }
+  }, [isLoggedIn, navigate]);
   return (
     <>
       <Navbar />
