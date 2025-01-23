@@ -1,5 +1,5 @@
 // src/homecontainer/Navbar.js
-import React, { useState, useEffect } from 'react';
+import  { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import { useAuth } from '../../AuthContext';
@@ -70,12 +70,14 @@ const Navbar = () => {
   return (
     <header className="fixed top-0 z-50 w-full bg-[#0A3622] text-white px-16 text-lg">
       <div className="flex gap-5 justify-between w-full max-w-[1473px] max-md:flex-wrap max-md:max-w-full">
-        <img
-          loading="lazy"
-          src="/image/logo.png"
-          alt=""
-          className={`shrink-0 max-w-full aspect-[2.5] w-[200px] max-md:w-[150px] ${isMenuOpen ? 'hidden' : ''}`}
-        />
+      <Link to="/" className={`shrink-0 max-w-full aspect-[2.5] w-[200px] max-md:w-[150px] ${isMenuOpen ? 'hidden' : ''}`}>
+  <img
+    loading="lazy"
+    src="/image/logo.png"
+    alt="Logo"
+    className="max-w-full aspect-[2.5] w-[200px] max-md:w-[150px]"
+  />
+</Link>
         <nav className="flex gap-5 justify-between my-auto max-md:flex-wrap max-md:max-w-full">
           <div className="flex gap-8 justify-between my-auto">
             <button className="md:hidden" onClick={toggleMenu}>
