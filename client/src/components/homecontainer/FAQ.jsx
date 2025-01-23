@@ -71,7 +71,7 @@ const FAQ = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-slate-100 py-16 px-4">
+    <div className="min-h-screen bg-[#0A3622]/5 py-16 px-4">
       <div className="max-w-3xl mx-auto">
         <div className="text-center mb-16">
           <h2 className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-green-900 to-green-800 mb-4">

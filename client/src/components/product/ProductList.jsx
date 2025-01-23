@@ -229,7 +229,7 @@ const ProductList = () => {
   }
 
   return (
-    <div className="mt-10 bg-gradient-to-b from-slate-50 to-slate-100 " id="products">
+    <div className="mt-10  bg-[#0A3622]/5 " id="products">
      { toast.isOpen && 
          <ToastContainer
           position="top-right"
@@ -272,11 +272,11 @@ const ProductList = () => {
           />
         ))}
       </div>
-      <div className="flex justify-center px-1 mb-3 mt-5">
+      <div className="flex justify-center p-6 px-1 mb-8 mt-5">
         {currentPage > 1 && (
           <button
             onClick={() => paginate(currentPage - 1)}
-            className="px-4 mx-1 py-2 bg-gray-200 text-black rounded-lg"
+            className="px-4 mx-1 py-2 bg-white text-black rounded-lg"
           >
             Previous
           </button>
@@ -289,7 +289,7 @@ const ProductList = () => {
         {currentPage < Math.ceil(products.length / productsPerPage) && (
           <button
             onClick={() => paginate(currentPage + 1)}
-            className="px-4 mx-1 py-2 bg-gray-200 text-black rounded-lg"
+            className="px-4 mx-1 py-2 bg-white text-black rounded-lg"
           >
             Next
           </button>

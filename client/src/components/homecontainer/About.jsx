@@ -65,7 +65,7 @@ const About = () => {
                 sustainable future for home furnishing.
               </p>
             </div>
-            <div className="bg-[#0A3622] p-8 rounded-lg text-white">
+            <div className="bg-[#0A3622] p-8 rounded-[25px] text-white">
               <h3 className="text-2xl font-semibold mb-4">Why Choose RoomCraft?</h3>
               <ul className="space-y-3">
                 <li className="flex items-center">
@@ -95,7 +95,7 @@ const About = () => {
         <div className="max-w-6xl mx-auto px-4">
           <div className="grid md:grid-cols-3 gap-8">
             {features.map((feature, index) => (
-              <div key={index} className="text-center p-6 rounded-lg border border-[#0A3622]/20">
+              <div key={index} className="text-center p-6 rounded-[25px] border border-[#0A3622]/20">
                 <div className="text-4xl mb-4">{feature.icon}</div>
                 <h3 className="text-xl font-semibold text-[#0A3622] mb-2">{feature.title}</h3>
                 <p className="text-gray-600">{feature.description}</p>
