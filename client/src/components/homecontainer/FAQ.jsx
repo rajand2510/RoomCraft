@@ -72,6 +72,15 @@ const FAQ = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-50 to-slate-100 py-16 px-4">
+
+<section className='mb-10'>
+          <img
+            loading="lazy"
+            src="https://cdn.builder.io/api/v1/image/assets/TEMP/4e71b7e47c041381fdaa0a641f937a10d2dbe23db52c2bcdd69075ded8885ea3?apiKey=980db322e33a4a39a5052caa449e1da6&"
+            alt="Decorative image"
+            className="w-full border-4  border-white border-solid aspect-[2.86] fill-[url(<path-to-image>)_lightgray_-2.592px_-164.395px_/_100.556%_130.843%_no-repeat] stroke-[4px] stroke-white"
+          />
+        </section>
       <div className="max-w-3xl mx-auto">
         <div className="text-center mb-16">
           <h2 className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-green-900 to-green-800 mb-4">
