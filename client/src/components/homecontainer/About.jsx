@@ -93,9 +93,9 @@ const About = () => {
       {/* Features Section */}
       <div className="bg-white py-16">
         <div className="max-w-6xl mx-auto px-4">
-          <div className="grid md:grid-cols-3 gap-8">
+          <div className="grid md:grid-cols-3  gap-8">
             {features.map((feature, index) => (
-              <div key={index} className="text-center p-6 rounded-[25px] border border-[#0A3622]/20">
+              <div key={index} className="text-center bg-white shadow-lg p-6 rounded-[25px] border border-[#0A3622]/20">
                 <div className="text-4xl mb-4">{feature.icon}</div>
                 <h3 className="text-xl font-semibold text-[#0A3622] mb-2">{feature.title}</h3>
                 <p className="text-gray-600">{feature.description}</p>
