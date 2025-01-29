@@ -36,7 +36,7 @@ Roomcraft is an innovative e-commerce platform that allows users to explore and 
 
 * Node.js installed on your machine
 * MongoDB installed and running on your machine
-* Razorpay payment gateway account
+* Razorpay payment gateway 
 
 ### Installation
 
