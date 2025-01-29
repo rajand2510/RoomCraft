@@ -1,7 +1,7 @@
 // apiService.js
 import axios from 'axios';
 
-const BASE_URL = 'https://room-craft-api.vercel.app/api';
+const BASE_URL = 'https://roomcraft-qv8m.onrender.com/api';
 
 const api = axios.create({
   baseURL: BASE_URL,

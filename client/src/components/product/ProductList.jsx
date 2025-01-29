@@ -20,7 +20,7 @@ const ProductCard = ({ gltfPath, title, discription, price, positionY, initialSc
         const cartitemId = _id;
         const userId = decoded.id;
 
-        const response = await fetch(`https://room-craft-api.vercel.app/api/cart/cartlist?userId=${userId}&cartitemId=${cartitemId}`);
+        const response = await fetch(`https://roomcraft-qv8m.onrender.com/api/cart/cartlist?userId=${userId}&cartitemId=${cartitemId}`);
         const data = await response.json();
   
         if (data.length > 0) {
@@ -45,7 +45,7 @@ const ProductCard = ({ gltfPath, title, discription, price, positionY, initialSc
             cartitemId: _id
           };
   
-          const addCartResponse = await fetch('https://room-craft-api.vercel.app/api/cart/addcart', {
+          const addCartResponse = await fetch('https://roomcraft-qv8m.onrender.com/api/cart/addcart', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json'

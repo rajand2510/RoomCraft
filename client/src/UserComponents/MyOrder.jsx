@@ -62,7 +62,7 @@ const MyComponent = () => {
       try {
 
         
-        const response = await axios.get(`https://room-craft-api.vercel.app/api/ordered/myordered?userId=${userId}`);
+        const response = await axios.get(`https://roomcraft-qv8m.onrender.com/api/ordered/myordered?userId=${userId}`);
         const orders = response.data;
 
         // Group orders by orderId
@@ -94,7 +94,7 @@ const MyComponent = () => {
         const decoded = jwtDecode(token);
         const userId = decoded.id;
 
-        axios.get(`https://room-craft-api.vercel.app/api/person/users/${userId}`)
+        axios.get(`https://roomcraft-qv8m.onrender.com/api/person/users/${userId}`)
             .then(response => {
                 const userData = response.data.user;
                 setUser({

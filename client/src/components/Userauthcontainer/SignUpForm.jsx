@@ -80,7 +80,7 @@ const SignUpForm = () => {
         address,
         password,
       };
-      fetch('https://room-craft-api.vercel.app/api/person/signup', {
+      fetch('https://roomcraft-qv8m.onrender.com/api/person/signup', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
