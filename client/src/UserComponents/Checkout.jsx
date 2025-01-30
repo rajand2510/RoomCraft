@@ -417,23 +417,35 @@ const Checkout = () => {
                                     </p>
                                 </div>
                                 <div className="flex flex-col items-center">
-    {/* Toggle Switch */}
-    <label className="flex items-center cursor-pointer mb-4">
-      <input type="checkbox" className="hidden" onChange={() => setIsCOD(!isCOD)} />
-      <div className="w-12 h-6 bg-gray-300 rounded-full relative">
-        <div className={`absolute w-6 h-6 bg-white rounded-full shadow-md transition-all ${isCOD ? "right-0" : "left-0"}`}></div>
-      </div>
-      <span className="ml-2 text-lg font-medium">{isCOD ? "COD" : "Online"}</span>
-    </label>
+  {/* Toggle Switch */}
+  <label className="flex items-center cursor-pointer mb-4">
+    <input type="checkbox" className="hidden" onChange={() => setIsCOD(!isCOD)} />
+    <div className="w-12 h-6 bg-gray-300 rounded-full relative">
+      <div
+        className={`absolute w-6 h-6 bg-white rounded-full shadow-md transition-all ${isCOD ? "right-0" : "left-0"}`}
+      ></div>
+    </div>
+    <span className="ml-2 text-lg font-medium">{isCOD ? "COD" : "Online"}</span>
+  </label>
 
-    {/* Payment Button */}
-    <button
-      className="px-8 py-3 text-xl font-bold text-white bg-green-800 rounded-lg"
-      onClick={isCOD ? handleCashonDelivery : handlePayment}
-    >
-      {isCOD ? `Cash On Delivery Rs.${totalprice}` : `Pay Rs.${totalprice}`}
-    </button>
-  </div>
+  {/* Payment Button */}
+  <button
+    className={`px-8 py-3 text-xl font-bold text-white rounded-lg ${
+      totalprice === 0 ? "bg-gray-500 cursor-not-allowed" : "bg-green-800"
+    }`}
+    onClick={() => {
+      if (totalprice === 0) {
+        // Prevent further action if totalprice is 0
+        return;
+      }
+      isCOD ? handleCashonDelivery() : handlePayment();
+    }}
+    disabled={totalprice === 0} // Disable button when total price is 0
+  >
+    {isCOD ? `Cash On Delivery Rs.${totalprice}` : `Pay Rs.${totalprice}`}
+  </button>
+</div>;
+
                             </div>
                         </div>
                     </section>

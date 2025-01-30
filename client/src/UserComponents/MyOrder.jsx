@@ -23,7 +23,7 @@ console.log(imgsrc);
   )
 }
 
-const OrderSummary = ({ orderId, orderItems }) => {
+const OrderSummary = ({ orderId, orderItems,orderType }) => {
   const totalPrice = orderItems.reduce(
     (acc, item) => acc + item.price * item.quantity,
     0
@@ -39,7 +39,11 @@ const OrderSummary = ({ orderId, orderItems }) => {
           <OrderItem key={index} {...item} />
         ))}
       </ul>
+      <span>
+      <p className="self-end mt-7 text-green-700 mr-11 max-md:mr-2.5">Payment Mode: {orderType}</p>
       <p className="self-end mt-7 mr-11 max-md:mr-2.5">Total Rs.{totalPrice}</p>
+      </span>
+      
     </article>
   );
 };
@@ -144,9 +148,19 @@ if (loading) {
         </div>
       </section>
       <section className="flex flex-col ml-5 w-6/12 max-md:ml-0 max-md:w-full">
-        {Object.keys(groupedOrders).reverse().map((orderId) => (
-          <OrderSummary key={orderId} orderId={orderId} orderItems={groupedOrders[orderId]} />
-        ))}
+      {Object.keys(groupedOrders).reverse().map((orderId) => {
+  const orderItems = groupedOrders[orderId];
+  const orderType = orderItems.length > 0 ? orderItems[0].orderType : ""; // Get orderType from first item
+  
+  return (
+    <OrderSummary 
+      key={orderId}  
+      orderId={orderId} 
+      orderItems={orderItems} 
+      orderType={orderType} 
+    />
+  );
+})}
       </section>
     </main>
     <Footer />
