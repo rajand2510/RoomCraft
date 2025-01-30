@@ -26,6 +26,10 @@ const orderdone = new mongoose.Schema({
     orderId: {
         type: String,
         required: true,
+    },
+    orderType:  {
+        type: String,
+        required: true,
     }
 })
 const OrderDone = mongoose.model('OrderDone', orderdone);

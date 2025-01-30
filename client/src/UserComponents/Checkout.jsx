@@ -114,6 +114,8 @@ const Checkout = () => {
     const [products, setProducts] = useState([]);
     const { updateCartItems } = useCart();
     const navigate = useNavigate();
+    const [isCOD, setIsCOD] = useState(false);
+
     useEffect(() => {
         try {
             const token = localStorage.getItem('token');
@@ -233,7 +235,8 @@ const Checkout = () => {
     
               const unique_id = uuid();
               const orderId = unique_id.slice(0, 23);
-    
+              const orderType ="Online"
+
               const productsData = products.map((product) => ({
                 userId: userId,
                 title: product.title,
@@ -241,6 +244,7 @@ const Checkout = () => {
                 price: product.price,
                 quantity: product.quantity,
                 orderId,
+                orderType
               }));
     
               console.log(productsData);
@@ -313,8 +317,63 @@ const Checkout = () => {
         }
       };
 
-
-
+      const handleCashonDelivery = async () => {
+        try {
+          const token = localStorage.getItem('token');
+          if (!token) {
+            console.error('No token found');
+            return;
+          }
+      
+          const decoded = jwtDecode(token);
+          const userId = decoded.id;
+          const orderId = uuid().slice(0, 23);
+          const orderType ="Cash On Delivery"
+          const productsData = products.map((product) => ({
+            userId,
+            title: product.title,
+            imgsrc: product.imgsrc,
+            price: product.price,
+            quantity: product.quantity,
+            orderId,
+            orderType
+          }));
+      
+          // API Call to Place Order
+          const response = await axios.post('https://roomcraft-qv8m.onrender.com/api/ordered/orderitem', productsData);
+      
+          if (response.status === 200) {
+            // Clear cart after successful order
+            products.forEach((product) => {
+              handleDeleteProduct(product._id);
+            });
+      
+            updateCartItems(0);
+            navigate('/myorder');
+      
+            setTimeout(() => {
+              toast.success('Ordered Successfully.', {
+                position: "top-right",
+                autoClose: 2000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light"
+              });
+            }, 2000);
+          } else {
+            alert(`Order placement failed: ${response.statusText}`);
+          }
+        } catch (error) {
+          console.error('Error placing order:', error);
+          alert(`Order placement failed: ${error.message}`);
+        }
+      };
+      
+    
+     
     return (
         <>
             <Navbar />
@@ -357,12 +416,24 @@ const Checkout = () => {
                                         Rs.{totalprice}
                                     </p>
                                 </div>
-                                <button
-                                    className="justify-center items-center px-16 py-4 mt-10 text-2xl font-bold text-center text-white bg-green-800 rounded-3xl max-md:px-5"
-                                    onClick={handlePayment}
-                                >
-                                    Pay Rs.{totalprice}
-                                </button>
+                                <div className="flex flex-col items-center">
+    {/* Toggle Switch */}
+    <label className="flex items-center cursor-pointer mb-4">
+      <input type="checkbox" className="hidden" onChange={() => setIsCOD(!isCOD)} />
+      <div className="w-12 h-6 bg-gray-300 rounded-full relative">
+        <div className={`absolute w-6 h-6 bg-white rounded-full shadow-md transition-all ${isCOD ? "right-0" : "left-0"}`}></div>
+      </div>
+      <span className="ml-2 text-lg font-medium">{isCOD ? "COD" : "Online"}</span>
+    </label>
+
+    {/* Payment Button */}
+    <button
+      className="px-8 py-3 text-xl font-bold text-white bg-green-800 rounded-lg"
+      onClick={isCOD ? handleCashonDelivery : handlePayment}
+    >
+      {isCOD ? `Cash On Delivery Rs.${totalprice}` : `Pay Rs.${totalprice}`}
+    </button>
+  </div>
                             </div>
                         </div>
                     </section>
