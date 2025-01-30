@@ -419,13 +419,14 @@ const Checkout = () => {
                                 <div className="flex flex-col items-center">
   {/* Toggle Switch */}
   <label className="flex items-center cursor-pointer mb-4">
+  <span className="mr-2 text-lg  font-medium"> Online </span>
     <input type="checkbox" className="hidden" onChange={() => setIsCOD(!isCOD)} />
-    <div className="w-12 h-6 bg-gray-300 rounded-full relative">
+    <div className="w-12 h-6 bg-green-700  rounded-full relative">
       <div
         className={`absolute w-6 h-6 bg-white rounded-full shadow-md transition-all ${isCOD ? "right-0" : "left-0"}`}
       ></div>
     </div>
-    <span className="ml-2 text-lg font-medium">{isCOD ? "COD" : "Online"}</span>
+    <span className="ml-2 text-lg font-medium">COD</span>
   </label>
 
   {/* Payment Button */}
