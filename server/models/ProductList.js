@@ -36,9 +36,11 @@ const productList = new mongoose.Schema({
     positionY:{
         type:String,
         required:true,
-    }
-  
- 
+    },
+    productCategory:{
+        type:String,
+        required:true,
+    },
 })
 
 const ProductList = mongoose.model('ProductList', productList);
