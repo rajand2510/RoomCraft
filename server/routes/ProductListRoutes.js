@@ -3,19 +3,39 @@ const router = express.Router();
 const ProductList = require('../models/ProductList');
 
 // POST Method to add a Product Item
-router.post('/', async (req, res) =>{
-    try{
-        const data = req.body
-        const newProduct = new ProductList(data);
-        const response = await newProduct.save();
-        console.log('data saved');
-        res.status(200).json(response);
-    }
-    catch(err){
-        console.log(err);
-        res.status(500).json({error: 'Internal Server Error'});
-    }
-})
+router.post('/addproducts', async (req, res) => {
+  try {
+      const { id, title, discription, price, imgsrc, gltfPath, initialScale, positionY, productCategory } = req.body;
+
+      // Check if any required field is missing
+      if (!id || !title || !discription || !price || !imgsrc || !gltfPath || !initialScale || !positionY || !productCategory) {
+          return res.status(400).json({ error: 'All fields are required' });
+      }
+
+      // Create a new product instance
+      const newProduct = new ProductList({
+          id,
+          title,
+          discription,
+          price,
+          imgsrc,
+          gltfPath,
+          initialScale,
+          positionY,
+          productCategory
+      });
+
+      // Save the new product to the database
+      await newProduct.save();
+
+      console.log('New product added');
+      res.status(201).json(newProduct);  // Respond with the newly added product
+  } catch (err) {
+      console.error('Error adding product:', err);
+      res.status(500).json({ error: 'Internal Server Error', message: err.message });
+  }
+});
+
 
 // GET method to get the Product Items
 router.get('/products', async (req, res) =>{

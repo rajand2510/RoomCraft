@@ -9,6 +9,7 @@ import MainProduct from './components/product/MainProduct';
 import MyOrder from './UserComponents/MyOrder';
 import ToasterComponent from './PageNotFound/ToasterComponent';
 import About from './components/homecontainer/About';
+import AddProduct from './Admin/AddProduct';
 function App() {
   
   return (
@@ -23,6 +24,7 @@ function App() {
 <Route path="/not-found" element={<ToasterComponent/>} />
 <Route path="*" element={<Navigate to="/not-found" replace />}/>
 <Route path='/about'element={<About/>}/>
+<Route path='/addproducts'element={<AddProduct/>}/>
 </Routes>
   )
 }
