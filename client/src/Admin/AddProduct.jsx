@@ -31,6 +31,7 @@ const AddProduct = () => {
     try {
       const response = await axios.post('http://localhost:3000/api/productlist/addproducts', formData);
       console.log('Product added successfully:', response.data);
+      alert('Product added successfully:', response.data);
       setSuccess(true);
       setError(null);
     } catch (err) {
@@ -163,9 +164,9 @@ const AddProduct = () => {
             required
           >
             <option value="">Select Category</option>
-            <option value="Furniture">Chair</option>
-            <option value="Lighting">Lighting</option>
-            <option value="Decor">Decor</option>
+            <option value="Chair">Chair</option>
+            <option value="Night Lamp">Night Lamp</option>
+            <option value="Plant">Plant</option>
             <option value="Appliances">Appliances</option>
             <option value="Others">Others</option>
           </select>

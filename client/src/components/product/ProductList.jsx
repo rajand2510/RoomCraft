@@ -326,9 +326,9 @@ const ProductList = () => {
 const Sidebar = ({ selectedCategory, onCategorySelect }) => {
   const categories = [
     { _id: 1, name: 'All' },
-    { _id: 2, name: 'Furniture' },
-    { _id: 3, name: 'Lighting' },
-    { _id: 4, name: 'Wall Art' },
+    { _id: 2, name: 'Chair' },
+    { _id: 3, name: 'Night Lamp' },
+    { _id: 4, name: 'Plant' },
     { _id: 5, name: 'Decor' },
     { _id: 6, name: 'Outdoor' }
   ];
