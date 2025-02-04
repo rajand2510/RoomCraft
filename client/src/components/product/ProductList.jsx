@@ -362,7 +362,7 @@ const Sidebar = ({ selectedCategory, onCategorySelect }) => {
             {categories.map((category) => (
               <li
                 key={category._id}
-                className={`px-4 py-2 rounded-lg cursor-pointer hover:bg-gray-200 ${category.name === selectedCategory?.name ? 'bg-green-100' : 'bg-gray-100'}`}
+                className={`px-4 py-2 rounded-lg cursor-pointer hover:bg-green-700  hover:text-white  ${category.name === selectedCategory?.name ? 'bg-green-800 text-white' : 'bg-gray-100'}`}
                 onClick={() => handleCategoryClick(category)}
               >
                 {category.name}

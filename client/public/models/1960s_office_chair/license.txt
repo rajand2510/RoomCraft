@@ -1,0 +1,11 @@
+Model Information:
+* title:	1960s office chair
+* source:	https://sketchfab.com/3d-models/1960s-office-chair-39b7b0743f304081965587fb5cc3576e
+* author:	henriqueart_lfv (https://sketchfab.com/henriqueart_lfv)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "1960s office chair" (https://sketchfab.com/3d-models/1960s-office-chair-39b7b0743f304081965587fb5cc3576e) by henriqueart_lfv (https://sketchfab.com/henriqueart_lfv) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
