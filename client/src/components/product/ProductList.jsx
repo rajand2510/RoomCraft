@@ -7,12 +7,14 @@ import { useCart } from '../../CartContext';
 import apiService from "../api/apiService";
 import { jwtDecode } from 'jwt-decode';
 import { div } from "framer-motion/client";
-
+import { Folder, Armchair, Lightbulb, Sprout, Image, Boxes  ,Check  } from "lucide-react";
 
 const ProductCard = ({ gltfPath, title, discription, price, positionY, initialScale, _id, imgsrc }) => {
   const { updateCartItems } = useCart();
-
+  const [added, setAdded] = useState(false);
   const handleAddToCart = async () => {
+    
+    
     const tokenhandle = localStorage.getItem('token');
 
     if (tokenhandle) {
@@ -23,7 +25,7 @@ const ProductCard = ({ gltfPath, title, discription, price, positionY, initialSc
 
         const response = await fetch(`https://roomcraft-qv8m.onrender.com/api/cart/cartlist?userId=${userId}&cartitemId=${cartitemId}`);
         const data = await response.json();
-
+      
         if (data.length > 0) {
           toast.info('You already have this product in your cart.', {
             position: "top-right",
@@ -67,6 +69,9 @@ const ProductCard = ({ gltfPath, title, discription, price, positionY, initialSc
               theme: "light"
             });
           } else {
+
+            setAdded(true);
+            setTimeout(() => setAdded(false), 1500);
             toast.success('Item added to cart successfully', {
               position: "top-right",
               autoClose: 1000,
@@ -122,34 +127,42 @@ const ProductCard = ({ gltfPath, title, discription, price, positionY, initialSc
           <h2 className="text-base text-black truncate max-w-[270px] overflow-hidden">{title}</h2>
           <div className="flex gap-8 mt-7 font-bold">
             <p className="my-auto text-xl text-black">Rs.{price}</p>
+   
+
             <button
-              className="flex gap-1.0 px-2.5 py-1.5 text-sm text-white rounded-xl bg-neutral-700 hover:bg-neutral-800"
-              style={{ minWidth: '100px' }}
-              onClick={handleAddToCart}
-            >
-              <img
+      className={`flex items-center justify-center p-1 text-white rounded-xl shadow-md transition-all duration-300 
+                  ${added ? "bg-neutral-600" : "bg-neutral-700 hover:bg-neutral-800"}`}
+      style={{ minWidth: "40px" }}
+      onClick={handleAddToCart}
+    >
+      {added ?
+      
+      <Check size={20} /> :  <img
                 loading="lazy"
                 src="https://cdn.builder.io/api/v1/image/assets/TEMP/20da946bd58526d190052f874a3f98dcc8106b31f9cfef97cd2fdf5721a63f2b?apiKey=980db322e33a4a39a5052caa449e1da6&"
                 alt=""
-                className="shrink-0 aspect-[0.79] w-[15px]"
-              />
-              <span className="flex-auto my-auto">ADD TO CART</span>
-            </button>
+                className="shrink-0 aspect-[0.79] w-[18px]"
+              />}
+    </button>
+
           </div>
         </div>
-        <div className="self-end mt-11">
-          <Link to={`/xr?gltfPath=${gltfPath}`}>
-            <button className="flex justify-center items-center px-0.5 rounded-full bg-zinc-300 h-[35px] w-[35px]">
-              <img
-                loading="lazy"
-                src="https://cdn.builder.io/api/v1/image/assets/TEMP/c3953c11395d39a267a119923443e4f991c370c2e178305152ef11e99f79d659?apiKey=980db322e33a4a39a5052caa449e1da6&"
-                alt="AR View"
-                className="aspect-square w-[31px]"
-              />
-            </button>
-          </Link>
-        </div>
+      
       </div>
+      <div className="relative  z-30">
+  <Link to={`/xr?gltfPath=${gltfPath}`}>
+  
+    <button className="absolute bottom-[1px] right-2 flex justify-center items-center px-0.5 rounded-full bg-zinc-300 h-[35px] w-[35px]">
+      <img
+        loading="lazy"
+        src="https://cdn.builder.io/api/v1/image/assets/TEMP/c3953c11395d39a267a119923443e4f991c370c2e178305152ef11e99f79d659?apiKey=980db322e33a4a39a5052caa449e1da6&"
+        alt="AR View"
+        className="aspect-square w-[31px]"
+      />
+    </button>
+  </Link>
+</div>
+
     </div>
   );
 };
@@ -248,7 +261,7 @@ const ProductList = () => {
       <div className="flex justify-center">
         <p className="text-[40px] font-bold text-green-950">Our Products</p>
       </div>
-      <div className="flex flex-col mt-[20px] md:flex-row justify-between items-center mb-5 px-5 space-y-4 md:space-y-0 md:space-x-4">
+      <div className="flex flex-col ml-3 mt-[20px] md:flex-row justify-between items-center mb-5 px-5 space-y-4 md:space-y-0 md:space-x-4">
       <select
   className="w-full md:w-auto px-4 py-2 text-gray-800 bg-white
              rounded-lg shadow-md hover:shadow-lg 
@@ -323,7 +336,7 @@ const ProductList = () => {
   );
 };
 
-import { Folder, Armchair, Lightbulb, Sprout, Image, Boxes  } from "lucide-react";
+
 
 
 const Sidebar = ({ selectedCategory, onCategorySelect }) => {

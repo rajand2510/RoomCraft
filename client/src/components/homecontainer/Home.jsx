@@ -35,7 +35,7 @@ const Home = () => {
         <div className='bg-gradient-to-b from-slate-50 to-slate-100 '>    
                     <Navbar />
             <Landing/>
-            <section id="productlist">
+            <section className='mt-8' id="productlist">
                 <ProductList />
             </section>
             {/* <About/> */}
