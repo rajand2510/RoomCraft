@@ -445,7 +445,7 @@ const Checkout = () => {
   >
     {isCOD ? `Cash On Delivery Rs.${totalprice}` : `Pay Rs.${totalprice}`}
   </button>
-</div>;
+</div>
 
                             </div>
                         </div>
