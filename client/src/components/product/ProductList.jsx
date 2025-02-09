@@ -3,18 +3,18 @@ import { useMediaQuery } from "react-responsive";
 import { Link } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { useCart } from '../../CartContext'; 
+import { useCart } from '../../CartContext';
 import apiService from "../api/apiService";
-import {jwtDecode} from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode';
 import { div } from "framer-motion/client";
 
 
 const ProductCard = ({ gltfPath, title, discription, price, positionY, initialScale, _id, imgsrc }) => {
-  const { updateCartItems } = useCart(); 
-  
+  const { updateCartItems } = useCart();
+
   const handleAddToCart = async () => {
     const tokenhandle = localStorage.getItem('token');
-  
+
     if (tokenhandle) {
       try {
         const decoded = jwtDecode(tokenhandle);
@@ -23,7 +23,7 @@ const ProductCard = ({ gltfPath, title, discription, price, positionY, initialSc
 
         const response = await fetch(`https://roomcraft-qv8m.onrender.com/api/cart/cartlist?userId=${userId}&cartitemId=${cartitemId}`);
         const data = await response.json();
-  
+
         if (data.length > 0) {
           toast.info('You already have this product in your cart.', {
             position: "top-right",
@@ -45,7 +45,7 @@ const ProductCard = ({ gltfPath, title, discription, price, positionY, initialSc
             isorder: false,
             cartitemId: _id
           };
-  
+
           const addCartResponse = await fetch('https://roomcraft-qv8m.onrender.com/api/cart/addcart', {
             method: 'POST',
             headers: {
@@ -53,7 +53,7 @@ const ProductCard = ({ gltfPath, title, discription, price, positionY, initialSc
             },
             body: JSON.stringify(orderData)
           });
-  
+
           if (!addCartResponse.ok) {
             const errorData = await addCartResponse.json();
             toast.error('An error occurred while adding to cart:', {
@@ -107,12 +107,12 @@ const ProductCard = ({ gltfPath, title, discription, price, positionY, initialSc
   };
 
   return (
-    <div className="flex flex-col px-5 pt-5 pb-5 mx-[15px] my-[20px] bg-gray-50 shadow-2xl max-w-[380px] max-h-[480px] rounded-[25px]">
+    <div className="flex flex-col px-5 pt-5 pb-5 mx-[15px] my-[20px] bg-white shadow-md  max-w-[380px] max-h-[480px] rounded-[25px]">
       <Link
         target="_blank"
         rel="noopener noreferrer"
-      
-      to={`/products?gltfPath=${gltfPath}&title=${title}&discription=${discription}&price=${price}&positionY=${positionY}&initialScale=${initialScale}&imgsrc=${imgsrc}&_id=${_id}`}>
+
+        to={`/products?gltfPath=${gltfPath}&title=${title}&discription=${discription}&price=${price}&positionY=${positionY}&initialScale=${initialScale}&imgsrc=${imgsrc}&_id=${_id}`}>
         <div className="shrink-0 rounded-[20px] bg-zinc-300 h-[282px]">
           <img src={imgsrc} alt={title} className="rounded-[15px] h-[282px] w-[400px]" />
         </div>
@@ -200,7 +200,7 @@ const ProductList = () => {
 
   const handleCategorySelect = (category) => {
     setSelectedCategory(category); // Update the selected category
-    setCurrentPage(1); 
+    setCurrentPage(1);
   };
 
   let categoryProducts;
@@ -244,16 +244,19 @@ const ProductList = () => {
   }
 
   return (
-    <div> 
+    <div>
       <div className="flex justify-center">
         <p className="text-[40px] font-bold text-green-950">Our Products</p>
       </div>
       <div className="flex flex-col mt-[20px] md:flex-row justify-between items-center mb-5 px-5 space-y-4 md:space-y-0 md:space-x-4">
-        <select
-          className="px-4 py-2 w-full md:w-auto text-black bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-950"
-          value={priceFilter}
-          onChange={handlePriceFilterChange}
-        >
+      <select
+  className="w-full md:w-auto px-4 py-2 text-gray-800 bg-white
+             rounded-lg shadow-md hover:shadow-lg 
+             focus:outline-none focus:ring-2 focus:ring-gray-200 focus:border-gray-200
+             transition-all duration-300 ease-in-out"
+  value={priceFilter}
+  onChange={handlePriceFilterChange}
+>
           <option value="">Filter by Price</option>
           <option value="Low to high">Low to high</option>
           <option value="High to low">High to low</option>
@@ -285,42 +288,42 @@ const ProductList = () => {
             ))}
           </div>
         </div>
-        
+
       </div>
       <div className="flex justify-center p-6 px-1 mb-6 mt-5">
-            {currentPage > 1 && (
-              <button
-                onClick={() => {
-                  paginate(currentPage - 1);
-                  document.getElementById("products").scrollIntoView({ behavior: "smooth" });
-                }}
-                className="px-4 mx-1 py-2 bg-gray-200 text-black rounded-lg"
-              >
-                Previous
-              </button>
-            )}
+        {currentPage > 1 && (
+          <button
+            onClick={() => {
+              paginate(currentPage - 1);
+              document.getElementById("products").scrollIntoView({ behavior: "smooth" });
+            }}
+            className="px-4 mx-1 py-2 bg-gray-200 text-black rounded-lg"
+          >
+            Previous
+          </button>
+        )}
 
-            <button className="px-4 mx-1 py-2 bg-green-900 text-white rounded-lg cursor-default">
-              {currentPage}
-            </button>
+        <button className="px-4 mx-1 py-2 bg-green-900 text-white rounded-lg cursor-default">
+          {currentPage}
+        </button>
 
-            {currentPage < Math.ceil(filteredProducts.length / productsPerPage) && (
-              <button
-                onClick={() => {
-                  paginate(currentPage + 1);
-                  document.getElementById("products").scrollIntoView({ behavior: "smooth" });
-                }}
-                className="px-4 mx-1 py-2 bg-gray-200 text-black rounded-lg"
-              >
-                Next
-              </button>
-            )}
-          </div>
+        {currentPage < Math.ceil(filteredProducts.length / productsPerPage) && (
+          <button
+            onClick={() => {
+              paginate(currentPage + 1);
+              document.getElementById("products").scrollIntoView({ behavior: "smooth" });
+            }}
+            className="px-4 mx-1 py-2 bg-gray-200 text-black rounded-lg"
+          >
+            Next
+          </button>
+        )}
+      </div>
     </div>
   );
 };
 
-
+import { Folder, Armchair, Lightbulb, Sprout, Image, Boxes  } from "lucide-react";
 
 
 const Sidebar = ({ selectedCategory, onCategorySelect }) => {
@@ -330,8 +333,17 @@ const Sidebar = ({ selectedCategory, onCategorySelect }) => {
     { _id: 3, name: 'Night Lamp' },
     { _id: 4, name: 'Plant' },
     { _id: 5, name: 'Decor' },
-    { _id: 6, name: 'Outdoor' }
+    { _id: 6, name: 'Other' }
   ];
+
+  const categoryIcons = {
+    All: <Folder size={18} />,
+    Chair: <Armchair size={18} />,  // Fixed: Chair -> Armchair
+    "Night Lamp": <Lightbulb size={18} />,
+    Plant: <Sprout size={18} />,   // Better icon for a plant
+    Decor: <Image size={18} />,    // Represents decoration
+    Other: <Boxes size={18} />,
+  };
 
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
@@ -343,7 +355,7 @@ const Sidebar = ({ selectedCategory, onCategorySelect }) => {
   return (
     <div className="flex flex-col md:flex-row">
       {isMobile && (
-        <div className="border-4 bg-white border-gray-300 w-14 h-16 flex justify-center rounded-xl">
+        <div className=" bg-white shadow-md mb-1 w-14 h-16 flex justify-center rounded-xl">
           <button
             onClick={() => setIsSidebarOpen(!isSidebarOpen)}
             className="text-3xl text-green-800"
@@ -356,15 +368,17 @@ const Sidebar = ({ selectedCategory, onCategorySelect }) => {
       )}
 
       {(isMobile ? isSidebarOpen : true) && (
-        <div className="w-64 max-h-min ml-8 bg-white shadow-md rounded-2xl p-5 mt-10">
+        <div className="w-64 max-h-min ml-8  mb-2 bg-white shadow-md rounded-2xl p-5 mt-10">
           <h2 className="text-xl font-bold text-gray-800">Categories</h2>
           <ul className="mt-4 space-y-2">
             {categories.map((category) => (
               <li
                 key={category._id}
-                className={`px-4 py-2 rounded-lg cursor-pointer hover:bg-green-700  hover:text-white  ${category.name === selectedCategory?.name ? 'bg-green-800 text-white' : 'bg-gray-100'}`}
+                className={`px-4 py-2 flex items-center gap-2 rounded-lg cursor-pointer hover:bg-green-700 hover:text-white ${category.name === selectedCategory?.name ? "bg-green-800 text-white" : "bg-white"
+                  }`}
                 onClick={() => handleCategoryClick(category)}
               >
+                {categoryIcons[category.name]}
                 {category.name}
               </li>
             ))}
