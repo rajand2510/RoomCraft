@@ -1,7 +1,7 @@
 
 ## 3D Home Decor E-commerce Website with AR Integration
 
-![Screenshot 2024-07-06 144706](https://github.com/rajand2510/RoomCraft/assets/100859536/177b1a8c-5a7c-4771-bd40-8ba2e953dea5)# Roomcraft
+<img width="1853" height="921" alt="Screenshot 2025-08-07 111615" src="https://github.com/user-attachments/assets/561e3980-c5b3-49a4-af5d-64cca2f98883" /># Roomcraft
 ## Overview
 Roomcraft is an innovative e-commerce platform that allows users to explore and purchase home decor items in 3D view. With the integration of Augmented Reality (AR) technology, users can see how items would look in their own space before making a purchase.
 
@@ -9,6 +9,7 @@ Roomcraft is an innovative e-commerce platform that allows users to explore and 
 ## Technology Stack
 
 ### Frontend
+
 * **React**: For building reusable UI components and managing state changes
 * **Tailwind CSS**: For styling and layout management
 * **Spline**:For landing page
